@@ -13,8 +13,6 @@ class CustomElevatedButton extends StatelessWidget {
   final bool hasSuffixIcon;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
-  final double? verticalPadding;
-  final double? horizontalPadding;
 
   const CustomElevatedButton({
     super.key,
@@ -27,8 +25,6 @@ class CustomElevatedButton extends StatelessWidget {
     this.hasSuffixIcon = false,
     this.prefixIcon,
     this.suffixIcon,
-    this.verticalPadding,
-    this.horizontalPadding,
   });
 
   @override
@@ -45,8 +41,8 @@ class CustomElevatedButton extends StatelessWidget {
         ),
         elevation: 0,
         padding: EdgeInsets.symmetric(
-          vertical: verticalPadding ?? height * 0.01,
-          horizontal: horizontalPadding ?? width * 0.3,
+          vertical: height * 0.015,
+          horizontal: width * 0.037,
         ),
       ),
       onPressed: onPressed,
