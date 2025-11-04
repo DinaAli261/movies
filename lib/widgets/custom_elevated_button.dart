@@ -13,8 +13,8 @@ class CustomElevatedButton extends StatelessWidget {
   final bool hasSuffixIcon;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
-  final double? buttonWidth;
-  final double? buttonHeight;
+  final double? verticalPadding;
+  final double? horizontalPadding;
 
   const CustomElevatedButton({
     super.key,
@@ -27,8 +27,8 @@ class CustomElevatedButton extends StatelessWidget {
     this.hasSuffixIcon = false,
     this.prefixIcon,
     this.suffixIcon,
-    this.buttonWidth,
-    this.buttonHeight,
+    this.verticalPadding,
+    this.horizontalPadding,
   });
 
   @override
@@ -36,44 +36,42 @@ class CustomElevatedButton extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    return SizedBox(
-      width: buttonWidth ?? width * 0.92,
-      height: buttonHeight ?? height * 0.06,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-            side: BorderSide(color: borderColor, width: width * 0.005),
-          ),
-          elevation: 0,
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 2),
         ),
-        onPressed: onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            (hasPrefixIcon && prefixIcon != null)
-                ? Row(
-                    children: [
-                      prefixIcon!,
-                      SizedBox(width: width * 0.02),
-                    ],
-                  )
-                : const SizedBox.shrink(),
-
-            Text(text, style: textStyle ?? AppTextStyles.semibold20Black),
-
-            (hasSuffixIcon && suffixIcon != null)
-                ? Row(
-                    children: [
-                      SizedBox(width: width * 0.02),
-                      suffixIcon!,
-                    ],
-                  )
-                : const SizedBox.shrink(),
-          ],
+        elevation: 0,
+        padding: EdgeInsets.symmetric(
+          vertical: verticalPadding ?? height * 0.01,
+          horizontal: horizontalPadding ?? width * 0.3,
         ),
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          (hasPrefixIcon && prefixIcon != null)
+              ? Row(
+                  children: [
+                    prefixIcon!,
+                    SizedBox(width: width * 0.02),
+                  ],
+                )
+              : const SizedBox.shrink(),
+          Text(text, style: textStyle ?? AppTextStyles.semibold20Black),
+          (hasSuffixIcon && suffixIcon != null)
+              ? Row(
+                  children: [
+                    SizedBox(width: width * 0.02),
+                    suffixIcon!,
+                  ],
+                )
+              : const SizedBox.shrink(),
+        ],
       ),
     );
   }
