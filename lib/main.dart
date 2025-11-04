@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:movies/auth/forget_password/forget_password.dart';
+import 'package:movies/auth/login/login.dart';
+import 'package:movies/auth/register/register.dart';
+import 'package:movies/home/home_screen.dart';
+import 'package:movies/movie_details/movie_details.dart';
+import 'package:movies/on_boarding/on_boarding.dart';
+import 'package:movies/update_profile/update_profile.dart';
+import 'package:movies/utils/app_routes.dart';
+import 'package:movies/utils/app_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +21,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.light,
+      initialRoute: AppRoutes.onBoardingRouteName,
+      routes: {
+        AppRoutes.onBoardingRouteName: (context) => OnBoarding(),
+        AppRoutes.homeScreenRouteName: (context) => HomeScreen(),
+        AppRoutes.loginRouteName: (context) => Login(),
+        AppRoutes.registerRouteName: (context) => Register(),
+        AppRoutes.forgetPasswordRouteName: (context) => ForgetPassword(),
+        AppRoutes.updateProfileRouteName: (context) => UpdateProfile(),
+        AppRoutes.movieDetailsRouteName: (context) => MovieDetails()
+      },
+      themeMode: ThemeMode.dark,
+      theme: AppTheme.darkTheme,
     );
   }
 }
