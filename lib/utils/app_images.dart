@@ -1,4 +1,4 @@
-class AppTextStyles {
+class AppImages {
   static const String avatar1 = "assets/images/avatar1.png";
   static const String avatar2 = "assets/images/avatar2.png";
   static const String avatar3 = "assets/images/avatar3.png";
