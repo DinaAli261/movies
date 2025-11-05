@@ -36,7 +36,7 @@ class _OnBoardingState extends State<OnBoarding> {
     "Find Your Next Favorite Movie Here",
     "Discover Movies",
     "Explore All Genres",
-    "Create Watchlists",
+    "Create WatchLists",
     "Rate, Review, and Learn",
     "Start Watching Now",
   ];
@@ -71,7 +71,6 @@ class _OnBoardingState extends State<OnBoarding> {
       );
     } else {
       // TODO: Navigate to the next phase
-      print("Onboarding completed!");
     }
   }
 
