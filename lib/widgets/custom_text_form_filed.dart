@@ -34,7 +34,7 @@ class CustomTextFormField extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 0.025 * height),
       child: TextFormField(
         cursorColor: AppColors.yellow,
-        style: hintStyle,
+        style: AppTextStyles.regular16White,
         validator: validator,
         controller: controller,
         obscureText: obscureText,
