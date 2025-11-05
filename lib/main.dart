@@ -3,6 +3,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:movies/auth/forget_password/forget_password.dart';
 import 'package:movies/auth/login/login.dart';
 import 'package:movies/auth/register/register.dart';
+import 'package:movies/auth/reset_password/reset_password.dart';
 import 'package:movies/home/home_screen.dart';
 import 'package:movies/movie_details/movie_details.dart';
 import 'package:movies/on_boarding/on_boarding.dart';
@@ -25,13 +26,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.onBoardingRouteName,
+      initialRoute: AppRoutes.resetPasswordRouteName,
       routes: {
         AppRoutes.onBoardingRouteName: (context) => OnBoarding(),
         AppRoutes.homeScreenRouteName: (context) => HomeScreen(),
         AppRoutes.loginRouteName: (context) => Login(),
         AppRoutes.registerRouteName: (context) => Register(),
         AppRoutes.forgetPasswordRouteName: (context) => ForgetPassword(),
+        AppRoutes.resetPasswordRouteName: (context) => ResetPassword(),
         AppRoutes.updateProfileRouteName: (context) => UpdateProfile(),
         AppRoutes.movieDetailsRouteName: (context) => MovieDetails()
       },
