@@ -20,6 +20,7 @@ class AppImages {
   static const String passwordIcon = "assets/images/passwordIcon.png";
   static const String passwordIcon2 = "assets/images/passwordIcon2.png";
   static const String phoneIcon = "assets/images/phoneIcon.png";
+  static const String googleIcon = "assets/images/googleIcon.png";
   static const String updateNameIcon = "assets/images/updateNameIcon.png";
   static const String forgetPassword = "assets/images/forgetPassword.png";
   static const String loginLogo = "assets/images/loginLogo.png";
