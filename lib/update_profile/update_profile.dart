@@ -3,6 +3,7 @@ import 'package:movies/model/account.dart';
 import 'package:movies/update_profile/widget/avatars_bottom_sheet.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
+import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_text_styles.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
 import 'package:movies/widgets/custom_text_button.dart';
@@ -90,7 +91,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   alignment: AlignmentGeometry.centerLeft,
                   child: CustomTextButton(text: "Reset Password",
                       textStyle: AppTextStyles.regular20White,
-                      onPressed: () {})),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                            AppRoutes.resetPasswordRouteName);
+                      })),
               Spacer(),
               CustomElevatedButton(text: "Delete Account",
                 textStyle: AppTextStyles.regular20White,

@@ -35,7 +35,6 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       appBar: AppBar(
         title: Text("Forget Password", style: AppTextStyles.regular16Yellow),
         centerTitle: true,
-        leading: Icon(Icons.arrow_back, size: 24, color: AppColors.yellow),
       ),
       body: Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
