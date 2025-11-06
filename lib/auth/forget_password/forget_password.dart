@@ -49,7 +49,7 @@ Widget build(BuildContext context) {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset(AppImages.forgetPassword),
-            CustomeTextFormField(
+            CustomTextFormField(
               validator: (txt) {
                 if (txt == null || txt.isEmpty) {
                   return "Please Enter your Email";

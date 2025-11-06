@@ -19,6 +19,16 @@ class _ResetPasswordState extends State<ResetPassword> {
   bool isObscureOld = true;
   bool isObscureNew = true;
   bool isObscureConfirm = true;
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    oldPasswordController.dispose();
+    newPasswordController.dispose();
+    confirmNewPasswordController.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,86 +45,127 @@ class _ResetPasswordState extends State<ResetPassword> {
           horizontal: 0.037 * width,
           vertical: 0.025 * height,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            CustomTextFormField(
-              controller: oldPasswordController,
-              hintText: " Old Password",
-              hintStyle: AppTextStyles.regular15White,
-              obscureText: isObscureOld,
-              prefixIcon: ImageIcon(
-                AssetImage(AppImages.passwordIcon),
-                color: AppColors.white,
-              ),
-              suffixIcon: InkWell(
-                onTap: () {
-                  isObscureOld = !isObscureOld;
-                  setState(() {});
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              CustomTextFormField(
+                controller: oldPasswordController,
+                hintText: " Old Password",
+                hintStyle: AppTextStyles.regular15White,
+                obscureText: isObscureOld,
+                prefixIcon: ImageIcon(
+                  AssetImage(AppImages.passwordIcon),
+                  color: AppColors.white,
+                ),
+                suffixIcon: InkWell(
+                  onTap: () {
+                    isObscureOld = !isObscureOld;
+                    setState(() {});
+                  },
+                  child: (isObscureOld)
+                      ? ImageIcon(
+                    AssetImage(AppImages.passwordIcon2),
+                    color: AppColors.white,
+                  )
+                      : Icon(Icons.remove_red_eye, color: AppColors.white),
+                ),
+                //todo: update validator from api
+                validator: (text) {
+                  if (text == null || text
+                      .trim()
+                      .isEmpty) {
+                    return 'please Enter password';
+                  }
+                  if (text.length < 6) {
+                    return 'password less than 6 character ';
+                  }
+                  return null;
                 },
-                child: (isObscureOld)
-                    ? ImageIcon(
-                        AssetImage(AppImages.passwordIcon2),
-                        color: AppColors.white,
-                      )
-                    : Icon(Icons.remove_red_eye, color: AppColors.white),
               ),
-            ),
 
-            CustomTextFormField(
-              controller: newPasswordController,
-              hintText: "New Password",
-              hintStyle: AppTextStyles.regular15White,
-              obscureText: isObscureNew,
-              prefixIcon: ImageIcon(
-                AssetImage(AppImages.passwordIcon),
-                color: AppColors.white,
-              ),
-              suffixIcon: InkWell(
-                onTap: () {
-                  isObscureNew = !isObscureNew;
-                  setState(() {});
+              CustomTextFormField(
+                controller: newPasswordController,
+                hintText: "New Password",
+                hintStyle: AppTextStyles.regular15White,
+                obscureText: isObscureNew,
+                prefixIcon: ImageIcon(
+                  AssetImage(AppImages.passwordIcon),
+                  color: AppColors.white,
+                ),
+                suffixIcon: InkWell(
+                  onTap: () {
+                    isObscureNew = !isObscureNew;
+                    setState(() {});
+                  },
+                  child: (isObscureNew)
+                      ? ImageIcon(
+                    AssetImage(AppImages.passwordIcon2),
+                    color: AppColors.white,
+                  )
+                      : Icon(Icons.remove_red_eye, color: AppColors.white),
+                ),
+                validator: (text) {
+                  if (text == null || text
+                      .trim()
+                      .isEmpty) {
+                    return 'please Enter password';
+                  }
+                  if (text.length < 6) {
+                    return 'password less than 6 character ';
+                  }
+                  return null;
                 },
-                child: (isObscureNew)
-                    ? ImageIcon(
-                        AssetImage(AppImages.passwordIcon2),
-                        color: AppColors.white,
-                      )
-                    : Icon(Icons.remove_red_eye, color: AppColors.white),
               ),
-            ),
-            CustomTextFormField(
-              controller: confirmNewPasswordController,
-              hintText: "Confirm New Password",
-              hintStyle: AppTextStyles.regular15White,
-              obscureText: isObscureConfirm,
-              prefixIcon: ImageIcon(
-                AssetImage(AppImages.passwordIcon),
-                color: AppColors.white,
-              ),
-              suffixIcon: InkWell(
-                onTap: () {
-                  isObscureConfirm = !isObscureConfirm;
-                  setState(() {});
+              CustomTextFormField(
+                controller: confirmNewPasswordController,
+                hintText: "Confirm New Password",
+                hintStyle: AppTextStyles.regular15White,
+                obscureText: isObscureConfirm,
+                prefixIcon: ImageIcon(
+                  AssetImage(AppImages.passwordIcon),
+                  color: AppColors.white,
+                ),
+                suffixIcon: InkWell(
+                  onTap: () {
+                    isObscureConfirm = !isObscureConfirm;
+                    setState(() {});
+                  },
+                  child: (isObscureConfirm)
+                      ? ImageIcon(
+                    AssetImage(AppImages.passwordIcon2),
+                    color: AppColors.white,
+                  )
+                      : Icon(Icons.remove_red_eye, color: AppColors.white),
+                ),
+                validator: (text) {
+                  if (text == null || text
+                      .trim()
+                      .isEmpty) {
+                    return 'please Enter password';
+                  }
+                  if (text != newPasswordController.text) {
+                    return 'This password is incorrect';
+                  }
+                  return null;
                 },
-                child: (isObscureConfirm)
-                    ? ImageIcon(
-                        AssetImage(AppImages.passwordIcon2),
-                        color: AppColors.white,
-                      )
-                    : Icon(Icons.remove_red_eye, color: AppColors.white),
               ),
-            ),
-            CustomElevatedButton(
-              text: "Reset Password",
-              textStyle: AppTextStyles.regular20Black,
-              onPressed: () {
-                //todo: reset password button
-              },
-            ),
-          ],
+              CustomElevatedButton(
+                  text: "Reset Password",
+                  textStyle: AppTextStyles.regular20Black,
+                  onPressed: resetPassword
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void resetPassword() {
+    if (_formKey.currentState?.validate() == true) {
+      //todo register
+    }
   }
 }

@@ -191,6 +191,18 @@ class _OnBoardingState extends State<OnBoarding> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: PageView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: _pageController,
+        itemCount: onBoardingImgs.length,
+        onPageChanged: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        itemBuilder: (context, index) => _buildPage(index),
+      ),
+    );
   }
 }
