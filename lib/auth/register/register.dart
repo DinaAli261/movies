@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:movies/model/account.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_text_styles.dart';
@@ -16,21 +17,9 @@ class Register extends StatefulWidget {
   @override
   State<Register> createState() => _RegisterState();
 }
-
 class _RegisterState extends State<Register> {
-  bool isObsecureConfirmPassword = true;
-  bool isObsecurePassword = true;
-  List<String> avatars = [
-    AppImages.avatar1,
-    AppImages.avatar2,
-    AppImages.avatar3,
-    AppImages.avatar4,
-    AppImages.avatar5,
-    AppImages.avatar6,
-    AppImages.avatar7,
-    AppImages.avatar8,
-    AppImages.avatar9,
-  ];
+  bool isObscureConfirmPassword = true;
+  bool isObscurePassword = true;
   int currentIndex = 0;
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -38,6 +27,18 @@ class _RegisterState extends State<Register> {
   TextEditingController confirmPassword = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    name.dispose();
+    email.dispose();
+    password.dispose();
+    confirmPassword.dispose();
+    phoneNumber.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -74,7 +75,7 @@ class _RegisterState extends State<Register> {
                       },
                     ),
 
-                    itemCount: avatars.length,
+                    itemCount: Account.avatars.length,
                     itemBuilder: (context, index, realIndex) {
                       bool isCenter = index == currentIndex;
                       double size = isCenter ? width * 0.4 : width * 0.2;
@@ -87,7 +88,7 @@ class _RegisterState extends State<Register> {
                           height: size,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage(avatars[index]),
+                              image: AssetImage(Account.avatars[index]),
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -137,7 +138,7 @@ class _RegisterState extends State<Register> {
                   hintText: 'Password',
                   hintStyle: AppTextStyles.regular15White,
                   prefixIcon: Image.asset(AppImages.passwordIcon),
-                  obscureText: isObsecurePassword,
+                  obscureText: isObscurePassword,
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
                       return 'please Enter password';
@@ -149,10 +150,10 @@ class _RegisterState extends State<Register> {
                   },
                   suffixIcon: GestureDetector(
                     onTap: () {
-                      isObsecurePassword = !isObsecurePassword;
+                      isObscurePassword = !isObscurePassword;
                       setState(() {});
                     },
-                    child: isObsecurePassword
+                    child: isObscurePassword
                         ? Image.asset(AppImages.passwordIcon2)
                         : Icon(
                             Icons.remove_red_eye_rounded,
@@ -166,7 +167,7 @@ class _RegisterState extends State<Register> {
                   hintText: 'Confirm Password',
                   prefixIcon: Image.asset(AppImages.passwordIcon),
                   hintStyle: AppTextStyles.regular15White,
-                  obscureText: isObsecureConfirmPassword,
+                  obscureText: isObscureConfirmPassword,
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
                       return 'Please Enter your password ';
@@ -174,13 +175,14 @@ class _RegisterState extends State<Register> {
                     if (text != password.text) {
                       return 'This password is incorrect.';
                     }
+                    return null;
                   },
                   suffixIcon: GestureDetector(
                     onTap: () {
-                      isObsecureConfirmPassword = !isObsecureConfirmPassword;
+                      isObscureConfirmPassword = !isObscureConfirmPassword;
                       setState(() {});
                     },
-                    child: isObsecureConfirmPassword
+                    child: isObscureConfirmPassword
                         ? Image.asset(AppImages.passwordIcon2)
                         : Icon(
                             Icons.remove_red_eye_rounded,
@@ -195,7 +197,7 @@ class _RegisterState extends State<Register> {
                   prefixIcon: Image.asset(AppImages.phoneIcon),
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
-                      return 'Please Enter your PhoneNumber';
+                      return 'Please Enter your Phone Number';
                     }
                     return null;
                   },

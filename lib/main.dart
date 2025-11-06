@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.registerRouteName,
+      initialRoute: AppRoutes.updateProfileRouteName,
       routes: {
         AppRoutes.onBoardingRouteName: (context) => OnBoarding(),
         AppRoutes.homeScreenRouteName: (context) => HomeScreen(),
