@@ -18,60 +18,59 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   RegExp emailRegEx = RegExp(r"^[\w.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$");
 
-      @override
-      void dispose()
+  @override
+  void dispose()
 
   {
+    _emailController.dispose();
 
-  _emailController.dispose();
+    super
+        .
+    dispose();
+  }
 
-  super
-
-      .
-
-  dispose();
-}
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: Text("Forget Password", style: AppTextStyles.regular16Yellow),
-      centerTitle: true,
-      leading: Icon(Icons.arrow_back, size: 24, color: AppColors.yellow),
-    ),
-    body: Padding(
-      padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
-      child: Form(
-  key: formKey,
-        child: Column(
-          spacing: 24,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Image.asset(AppImages.forgetPassword),
-            CustomeTextFormField(
-              validator: (txt) {
-                if (txt == null || txt.isEmpty) {
-                  return "Please Enter your Email";
-                }
-                else if (!emailRegEx.hasMatch(txt)){
-                  return "Please Enter a valid Email";
-                }
-                return null;
-              },
-              controller: _emailController,
-              hintText: "Email",
-              prefixIcon: ImageIcon(
-                AssetImage(AppImages.emailIcon), color: AppColors.white,),
-            ),
-            CustomElevatedButton(text: "Verify Email", onPressed: _verifyEmail),
-          ],
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Forget Password", style: AppTextStyles.regular16Yellow),
+        centerTitle: true,
+        leading: Icon(Icons.arrow_back, size: 24, color: AppColors.yellow),
+      ),
+      body: Padding(
+        padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
+        child: Form(
+          key: formKey,
+          child: Column(
+            spacing: 24,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Image.asset(AppImages.forgetPassword),
+              CustomTextFormField(
+                validator: (txt) {
+                  if (txt == null || txt.isEmpty) {
+                    return "Please Enter your Email";
+                  }
+                  else if (!emailRegEx.hasMatch(txt)) {
+                    return "Please Enter a valid Email";
+                  }
+                  return null;
+                },
+                controller: _emailController,
+                hintText: "Email",
+                prefixIcon: ImageIcon(
+                  AssetImage(AppImages.emailIcon), color: AppColors.white,),
+              ),
+              CustomElevatedButton(
+                  text: "Verify Email", onPressed: _verifyEmail),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-void _verifyEmail() {
-  if (formKey.currentState!.validate()){}
-}}
+  void _verifyEmail() {
+    if (formKey.currentState!.validate()) {}
+  }
+}
