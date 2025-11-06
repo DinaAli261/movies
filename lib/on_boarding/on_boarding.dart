@@ -3,6 +3,7 @@ import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
 
+import '../utils/app_routes.dart';
 import '../utils/app_text_styles.dart';
 
 class OnBoarding extends StatefulWidget {
@@ -76,6 +77,7 @@ class _OnBoardingState extends State<OnBoarding> {
       );
     } else {
       // TODO: Navigate to the next phase
+      Navigator.of(context).pushReplacementNamed(AppRoutes.loginRouteName);
     }
   }
 

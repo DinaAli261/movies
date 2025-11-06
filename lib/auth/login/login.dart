@@ -105,7 +105,10 @@ class _LoginState extends State<Login> {
                       Align(
                         alignment: AlignmentGeometry.centerRight,
                         child: CustomTextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                                AppRoutes.forgetPasswordRouteName);
+                          },
                           text: "Forget Password ?",
                           textStyle: AppTextStyles.regular14Yellow,
                         ),
@@ -188,7 +191,9 @@ class _LoginState extends State<Login> {
 
   void login() {
     if (formKey.currentState?.validate() == true) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreenRouteName);
+      //todo:update navigator to home
+      //todo:update pushReplacementNamed
+      Navigator.of(context).pushNamed(AppRoutes.updateProfileRouteName);
     }
   }
 }
