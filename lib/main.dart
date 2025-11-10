@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:movies/auth/forget_password/forget_password.dart';
 import 'package:movies/auth/login/login.dart';
@@ -11,11 +12,18 @@ import 'package:movies/update_profile/update_profile.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_theme.dart';
 
-void main() {
+import 'bloc/language_bloc.dart';
+import 'bloc/language_state.dart';
+import 'l10n/app_localizations.dart';
+
+Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   FlutterNativeSplash.remove();
-  runApp(const MyApp());
+  runApp(BlocProvider(
+    create: (context) => LanguageBloc(),
+    child: MyApp(),
+  ),);
 }
 
 class MyApp extends StatelessWidget {
@@ -24,7 +32,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<LanguageBloc, LanguageState>(
+      builder: (context, state) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: Locale(state.currentLanguage),
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.onBoardingRouteName,
       routes: {
@@ -39,6 +52,8 @@ class MyApp extends StatelessWidget {
       },
       themeMode: ThemeMode.dark,
       theme: AppTheme.darkTheme,
+    );
+      },
     );
   }
 }

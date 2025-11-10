@@ -9,6 +9,8 @@ import 'package:movies/widgets/custom_elevated_button.dart';
 import 'package:movies/widgets/custom_text_button.dart';
 import 'package:movies/widgets/custom_text_form_filed.dart';
 
+import '../l10n/app_localizations.dart';
+
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({super.key});
 
@@ -33,7 +35,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
         .height;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pick Avatar", style: AppTextStyles.regular16Yellow,),
+        title: Text(AppLocalizations.of(context)!.pick_avatar,
+          style: AppTextStyles.regular16Yellow,),
         centerTitle: true,
       ),
       body: Padding(
@@ -57,7 +60,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     fit: BoxFit.fitHeight,)),
               SizedBox(height: height * 0.037),
               CustomTextFormField(controller: nameController,
-                hintText: "Profile Name",
+                hintText: AppLocalizations.of(context)!.profile_name,
                 hintStyle: AppTextStyles.regular20White,
                 prefixIcon: ImageIcon(AssetImage(AppImages.updateNameIcon),
                   color: AppColors.white,),
@@ -66,14 +69,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   if (text == null || text
                       .trim()
                       .isEmpty) {
-                    return 'Please Enter your Name';
+                    return AppLocalizations.of(context)!.please_enter_your_name;
                   }
                   return null;
                 },
               ),
               CustomTextFormField(
                 controller: phoneController,
-                hintText: "Phone",
+                hintText: AppLocalizations.of(context)!.phone,
                 hintStyle: AppTextStyles.regular20White,
                 prefixIcon: ImageIcon(
                   AssetImage(AppImages.phoneIcon), color: AppColors.white,),
@@ -82,27 +85,31 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   if (text == null || text
                       .trim()
                       .isEmpty) {
-                    return 'Please Enter your Phone Number';
+                    return AppLocalizations.of(context)!
+                        .please_enter_your_phone_number;
                   }
                   return null;
                 },
               ),
               Align(
                   alignment: AlignmentGeometry.centerLeft,
-                  child: CustomTextButton(text: "Reset Password",
+                  child: CustomTextButton(
+                      text: AppLocalizations.of(context)!.reset_password,
                       textStyle: AppTextStyles.regular20White,
                       onPressed: () {
                         Navigator.of(context).pushNamed(
                             AppRoutes.resetPasswordRouteName);
                       })),
               Spacer(),
-              CustomElevatedButton(text: "Delete Account",
+              CustomElevatedButton(
+                text: AppLocalizations.of(context)!.delete_account,
                 textStyle: AppTextStyles.regular20White,
                 onPressed: () {},
                 backgroundColor: AppColors.red,
                 borderColor: AppColors.red,),
               SizedBox(height: height * 0.02),
-              CustomElevatedButton(text: "Update Account",
+              CustomElevatedButton(
+                  text: AppLocalizations.of(context)!.update_account,
                   textStyle: AppTextStyles.regular20Black,
                   onPressed: () {
                     updateAccount();

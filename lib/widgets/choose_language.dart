@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../utils/app_colors.dart';
 import '../../utils/app_images.dart';
+import '../bloc/language_bloc.dart';
+import '../bloc/language_event.dart';
 
 class ChooseLanguage extends StatefulWidget {
   bool isLang;
@@ -32,8 +35,8 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
               setState(() {
                 isSelectedAr = true;
                 isSelectedEN = false;
-                // languageProvider.changeLanguage('ar'); // Commented for now
-                // saveLastLang("ar"); // Commented for now
+                BlocProvider.of<LanguageBloc>(context).add(
+                    ChangeLanguage("ar"));
               });
             },
             child: Container(
@@ -52,8 +55,8 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
               setState(() {
                 isSelectedAr = false;
                 isSelectedEN = true;
-                // languageProvider.changeLanguage('en'); // Commented for now
-                // saveLastLang("en"); // Commented for now
+                BlocProvider.of<LanguageBloc>(context).add(
+                    ChangeLanguage("en"));
               });
             },
             child: Container(

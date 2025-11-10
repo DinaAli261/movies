@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/widgets/choose_language.dart';
 
@@ -47,7 +48,7 @@ class _LoginState extends State<Login> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       CustomTextFormField(
-                        hintText: "Email",
+                        hintText: AppLocalizations.of(context)!.email,
                         hintStyle: AppTextStyles.regular15White,
                         prefixIcon: ImageIcon(
                           AssetImage(AppImages.emailIcon),
@@ -56,13 +57,15 @@ class _LoginState extends State<Login> {
                         controller: emailController,
                         validator: (text) {
                           if (text == null || text.trim().isEmpty) {
-                            return 'Please enter email';
+                            return AppLocalizations.of(context)!
+                                .please_enter_your_email;
                           }
                           final bool emailValid = RegExp(
                             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                           ).hasMatch(text);
                           if (!emailValid) {
-                            return 'Please enter valid email';
+                            return AppLocalizations.of(context)!
+                                .please_enter_a_valid_email;
                           }
                           return null;
                         },
@@ -70,7 +73,7 @@ class _LoginState extends State<Login> {
                       CustomTextFormField(
                         hasPadding: false,
                         controller: passwordController,
-                        hintText: "Password",
+                        hintText: AppLocalizations.of(context)!.password,
                         hintStyle: AppTextStyles.regular15White,
                         obscureText: isObscure,
                         prefixIcon: ImageIcon(
@@ -79,10 +82,12 @@ class _LoginState extends State<Login> {
                         ),
                         validator: (text) {
                           if (text == null || text.trim().isEmpty) {
-                            return 'Please enter password';
+                            return AppLocalizations.of(context)!
+                                .please_enter_password;
                           }
                           if (text.length < 6) {
-                            return 'Password should be at least 6 chars.';
+                            return AppLocalizations.of(context)!
+                                .password_should_be_at_least_6_chars;
                           }
                           return null;
                         },
@@ -109,14 +114,14 @@ class _LoginState extends State<Login> {
                             Navigator.of(context).pushNamed(
                                 AppRoutes.forgetPasswordRouteName);
                           },
-                          text: "Forget Password ?",
+                          text: AppLocalizations.of(context)!.forget_password_q,
                           textStyle: AppTextStyles.regular14Yellow,
                         ),
                       ),
                       SizedBox(height: height * 0.02),
                       CustomElevatedButton(
                         onPressed: login,
-                        text: "Login",
+                        text: AppLocalizations.of(context)!.login,
                         textStyle: AppTextStyles.regular20Grey,
                       ),
                       SizedBox(height: height * 0.01),
@@ -124,7 +129,8 @@ class _LoginState extends State<Login> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Don't Have Account ? ",
+                            '${AppLocalizations.of(context)!
+                                .do_not_have_account}  ',
                             style: AppTextStyles.regular14White,
                           ),
                           CustomTextButton(
@@ -133,7 +139,7 @@ class _LoginState extends State<Login> {
                                 context,
                               ).pushNamed(AppRoutes.registerRouteName);
                             },
-                            text: 'Create One',
+                            text: AppLocalizations.of(context)!.create_one,
                             textStyle: AppTextStyles.black14Yellow,
                           ),
                         ],
@@ -150,7 +156,8 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           SizedBox(width: width * 0.02),
-                          Text("OR", style: AppTextStyles.regular15Yellow),
+                          Text(AppLocalizations.of(context)!.or,
+                              style: AppTextStyles.regular15Yellow),
                           SizedBox(width: width * 0.02),
                           SizedBox(
                             width: width * 0.26,
@@ -163,7 +170,7 @@ class _LoginState extends State<Login> {
                       ),
                       SizedBox(height: height * 0.03),
                       CustomElevatedButton(
-                        text: "Login With Google",
+                        text: AppLocalizations.of(context)!.login_with_google,
                         textStyle: AppTextStyles.regular16Grey,
                         onPressed: () {},
                         hasPrefixIcon: true,

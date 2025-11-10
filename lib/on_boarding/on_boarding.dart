@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
@@ -38,14 +39,7 @@ class _OnBoardingState extends State<OnBoarding> {
     AppImages.onBoarding6,
   ];
 
-  List<String> onBoardingTitle = [
-    "Find Your Next Favorite Movie Here",
-    "Discover Movies",
-    "Explore All Genres",
-    "Create WatchLists",
-    "Rate, Review, and Learn",
-    "Start Watching Now",
-  ];
+  List<String> onBoardingTitle = [];
 
   List<List<Color>> gradientColors = [
     [
@@ -60,15 +54,7 @@ class _OnBoardingState extends State<OnBoarding> {
     [AppColors.transparent, AppColors.redGradient],
     [AppColors.transparent, AppColors.grayGradient],
   ];
-
-  List<String> onBoardingBody = [
-    "Get access to a huge library of movies to suit all tastes. You will surely like it.",
-    "Explore a vast collection of movies in all qualities and genres. Find your next favorite film with ease.",
-    "Discover movies from every genre, in all available qualities. Find something new and exciting to watch every day.",
-    "Save movies to your watchlist to keep track of what you want to watch next. Enjoy films in various qualities and genres.",
-    "Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews.",
-  ];
-
+  List<String> onBoardingBody = [];
   void _nextPage() {
     if (currentIndex < onBoardingImgs.length - 1) {
       _pageController.nextPage(
@@ -171,13 +157,15 @@ class _OnBoardingState extends State<OnBoarding> {
                 ],
                 const SizedBox(height: 24),
                 CustomElevatedButton(
-                  text: index == onBoardingImgs.length - 1 ? "Finish" : "Next",
+                  text: index == onBoardingImgs.length - 1
+                      ? AppLocalizations.of(context)!.finish
+                      : AppLocalizations.of(context)!.next,
                   onPressed: _nextPage,
                 ),
                 if (index != 1) ...[
                   const SizedBox(height: 16),
                   CustomElevatedButton(
-                    text: "Back",
+                    text: AppLocalizations.of(context)!.back,
                     textStyle: AppTextStyles.semibold20Yellow,
                     onPressed: _previousPage,
                     borderColor: AppColors.yellow,
@@ -190,9 +178,23 @@ class _OnBoardingState extends State<OnBoarding> {
       ],
     );
   }
-
   @override
   Widget build(BuildContext context) {
+    onBoardingTitle = [
+      AppLocalizations.of(context)!.on_boarding_title1,
+      AppLocalizations.of(context)!.on_boarding_title2,
+      AppLocalizations.of(context)!.on_boarding_title3,
+      AppLocalizations.of(context)!.on_boarding_title4,
+      AppLocalizations.of(context)!.on_boarding_title5,
+      AppLocalizations.of(context)!.on_boarding_title6,
+    ];
+    onBoardingBody = [
+      AppLocalizations.of(context)!.on_boarding_body1,
+      AppLocalizations.of(context)!.on_boarding_body2,
+      AppLocalizations.of(context)!.on_boarding_body3,
+      AppLocalizations.of(context)!.on_boarding_body4,
+      AppLocalizations.of(context)!.on_boarding_body5,
+    ];
     return Scaffold(
       body: PageView.builder(
         physics: const NeverScrollableScrollPhysics(),

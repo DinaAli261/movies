@@ -34,7 +34,7 @@ class AppTextStyles {
     fontSize: 15,
     fontWeight: FontWeight.w400,
   );
-  static TextStyle regular14Yellow = GoogleFonts.roboto(
+  static TextStyle regular14Yellow = GoogleFonts.cairo(
     color: AppColors.yellow,
     fontSize: 14,
     fontWeight: FontWeight.w400,

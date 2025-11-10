@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/model/account.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/utils/app_routes.dart';
@@ -46,7 +47,8 @@ class _RegisterState extends State<Register> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register', style: AppTextStyles.regular16Yellow),
+        title: Text(AppLocalizations.of(context)!.register,
+            style: AppTextStyles.regular16Yellow),
         centerTitle: true,
       ),
       body: Padding(
@@ -98,7 +100,7 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
                 Text(
-                  'Avatar',
+                  AppLocalizations.of(context)!.avatar,
                   style: AppTextStyles.regular16White,
                   textAlign: TextAlign.center,
                 ),
@@ -106,45 +108,50 @@ class _RegisterState extends State<Register> {
 
                 CustomTextFormField(
                   controller: name,
-                  hintText: 'Name',
+                  hintText: AppLocalizations.of(context)!.name,
 
                   prefixIcon: Image.asset(AppImages.updateNameIcon),
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
-                      return 'Please Enter your Name';
+                      return AppLocalizations.of(context)!
+                          .please_enter_your_name;
                     }
                     return null;
                   },
                 ), //Name
                 CustomTextFormField(
                   controller: email,
-                  hintText: 'Email',
+                  hintText: AppLocalizations.of(context)!.email,
                   prefixIcon: Image.asset(AppImages.emailIcon),
                   validator: (text) {
                     if (text == null || text.isEmpty) {
-                      return 'please Enter your Email';
+                      return AppLocalizations.of(context)!
+                          .please_enter_your_email;
                     }
                     bool emailRegEx = RegExp(
                       r"^[\w.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$",
                     ).hasMatch(text);
                     if (!emailRegEx) {
-                      return 'invalid Email';
+                      return AppLocalizations.of(context)!
+                          .please_enter_a_valid_email;
                     }
                     return null;
                   },
                 ), //email
                 CustomTextFormField(
                   controller: password,
-                  hintText: 'Password',
+                  hintText: AppLocalizations.of(context)!.password,
                   hintStyle: AppTextStyles.regular15White,
                   prefixIcon: Image.asset(AppImages.passwordIcon),
                   obscureText: isObscurePassword,
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
-                      return 'please Enter password';
+                      return AppLocalizations.of(context)!
+                          .please_enter_password;
                     }
                     if (text.length < 6) {
-                      return 'password less than 6 character ';
+                      return AppLocalizations.of(context)!
+                          .password_should_be_at_least_6_chars;
                     }
                     return null;
                   },
@@ -164,16 +171,18 @@ class _RegisterState extends State<Register> {
                 ), //password
                 CustomTextFormField(
                   controller: confirmPassword,
-                  hintText: 'Confirm Password',
+                  hintText: AppLocalizations.of(context)!.confirm_password,
                   prefixIcon: Image.asset(AppImages.passwordIcon),
                   hintStyle: AppTextStyles.regular15White,
                   obscureText: isObscureConfirmPassword,
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
-                      return 'Please Enter your password ';
+                      return AppLocalizations.of(context)!
+                          .please_enter_password;
                     }
                     if (text != password.text) {
-                      return 'This password is incorrect.';
+                      return AppLocalizations.of(context)!
+                          .this_password_is_incorrect;
                     }
                     return null;
                   },
@@ -193,28 +202,29 @@ class _RegisterState extends State<Register> {
                 ), //confirmPassword
                 CustomTextFormField(
                   controller: phoneNumber,
-                  hintText: 'Phone Number',
+                  hintText: AppLocalizations.of(context)!.phone_number,
                   prefixIcon: Image.asset(AppImages.phoneIcon),
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
-                      return 'Please Enter your Phone Number';
+                      return AppLocalizations.of(context)!
+                          .please_enter_your_phone_number;
                     }
                     return null;
                   },
                 ), //phone
                 CustomElevatedButton(
-                  text: 'Create Account',
+                  text: AppLocalizations.of(context)!.create_account,
                   onPressed: register,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Already Have Account?',
+                      '${AppLocalizations.of(context)!.already_have_account}  ',
                       style: AppTextStyles.regular14White,
                     ),
                     CustomTextButton(
-                      text: 'Login',
+                      text: AppLocalizations.of(context)!.login,
                       onPressed: () {
                         //todo login
                         Navigator.of(
