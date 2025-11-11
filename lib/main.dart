@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -11,14 +12,16 @@ import 'package:movies/on_boarding/on_boarding.dart';
 import 'package:movies/update_profile/update_profile.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_theme.dart';
-
+import 'firebase_options.dart';
 import 'bloc/language_bloc.dart';
 import 'bloc/language_state.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  FFlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   FlutterNativeSplash.remove();
   runApp(BlocProvider(
     create: (context) => LanguageBloc(),
