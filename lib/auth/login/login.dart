@@ -198,9 +198,7 @@ class _LoginState extends State<Login> {
 
   void login() {
     if (formKey.currentState?.validate() == true) {
-      //todo:update navigator to home
-      //todo:update pushReplacementNamed
-      Navigator.of(context).pushNamed(AppRoutes.updateProfileRouteName);
+      Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreenRouteName);
     }
   }
 }
