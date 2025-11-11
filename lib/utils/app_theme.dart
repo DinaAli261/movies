@@ -11,11 +11,8 @@ class AppTheme {
             color: AppColors.yellow
         )
     ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.black,
-      unselectedItemColor: AppColors.white,
-      selectedItemColor: AppColors.yellow,
-    ),
+      bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: AppColors.transparent
+      )
   );
 }

@@ -24,10 +24,8 @@ class AppImages {
   static const String updateNameIcon = "assets/images/updateNameIcon.png";
   static const String forgetPassword = "assets/images/forgetPassword.png";
   static const String loginLogo = "assets/images/loginLogo.png";
-  static const String browseIcon = "assets/images/browseIcon.png";
   static const String exitIcon = "assets/images/exitIcon.png";
   static const String historyIcon = "assets/images/historyIcon.png";
-  static const String homeIcon = "assets/images/homeIcon.png";
   static const String movieDetailsIconClock =
       "assets/images/movieDetailsIconClock.png";
   static const String movieDetailsIconHeart =
@@ -38,7 +36,9 @@ class AppImages {
       "assets/images/movieDetailsIconStar.png";
   static const String movieDetailsArrowBack =
       "assets/images/movieDetailsArrowBack.png";
+  static const String watchListIcon = "assets/images/watchListIcon.png";
+  static const String homeIcon = "assets/images/homeIcon.png";
   static const String profileIcon = "assets/images/profileIcon.png";
   static const String searchIcon = "assets/images/searchIcon.png";
-  static const String watchListIcon = "assets/images/watchListIcon.png";
+  static const String browseIcon = "assets/images/browseIcon.png";
 }
