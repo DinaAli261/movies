@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/utils/app_text_styles.dart';
@@ -37,7 +38,8 @@ class _ResetPasswordState extends State<ResetPassword> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Reset Password", style: AppTextStyles.regular16Yellow),
+        title: Text(AppLocalizations.of(context)!.reset_password,
+            style: AppTextStyles.regular16Yellow),
         centerTitle: true,
       ),
       body: Padding(
@@ -52,7 +54,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             children: [
               CustomTextFormField(
                 controller: oldPasswordController,
-                hintText: " Old Password",
+                hintText: AppLocalizations.of(context)!.old_password,
                 hintStyle: AppTextStyles.regular15White,
                 obscureText: isObscureOld,
                 prefixIcon: ImageIcon(
@@ -76,10 +78,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                   if (text == null || text
                       .trim()
                       .isEmpty) {
-                    return 'please Enter password';
+                    return AppLocalizations.of(context)!.please_enter_password;
                   }
                   if (text.length < 6) {
-                    return 'password less than 6 character ';
+                    return AppLocalizations.of(context)!
+                        .password_should_be_at_least_6_chars;
                   }
                   return null;
                 },
@@ -87,7 +90,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
               CustomTextFormField(
                 controller: newPasswordController,
-                hintText: "New Password",
+                hintText: AppLocalizations.of(context)!.new_password,
                 hintStyle: AppTextStyles.regular15White,
                 obscureText: isObscureNew,
                 prefixIcon: ImageIcon(
@@ -110,17 +113,18 @@ class _ResetPasswordState extends State<ResetPassword> {
                   if (text == null || text
                       .trim()
                       .isEmpty) {
-                    return 'please Enter password';
+                    return AppLocalizations.of(context)!.please_enter_password;
                   }
                   if (text.length < 6) {
-                    return 'password less than 6 character ';
+                    return AppLocalizations.of(context)!
+                        .password_should_be_at_least_6_chars;
                   }
                   return null;
                 },
               ),
               CustomTextFormField(
                 controller: confirmNewPasswordController,
-                hintText: "Confirm New Password",
+                hintText: AppLocalizations.of(context)!.confirm_new_password,
                 hintStyle: AppTextStyles.regular15White,
                 obscureText: isObscureConfirm,
                 prefixIcon: ImageIcon(
@@ -143,16 +147,17 @@ class _ResetPasswordState extends State<ResetPassword> {
                   if (text == null || text
                       .trim()
                       .isEmpty) {
-                    return 'please Enter password';
+                    return AppLocalizations.of(context)!.please_enter_password;
                   }
                   if (text != newPasswordController.text) {
-                    return 'This password is incorrect';
+                    return AppLocalizations.of(context)!
+                        .this_password_is_incorrect;
                   }
                   return null;
                 },
               ),
               CustomElevatedButton(
-                  text: "Reset Password",
+                  text: AppLocalizations.of(context)!.reset_password,
                   textStyle: AppTextStyles.regular20Black,
                   onPressed: resetPassword
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/utils/app_text_styles.dart';
@@ -33,7 +34,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Forget Password", style: AppTextStyles.regular16Yellow),
+        title: Text(AppLocalizations.of(context)!.forget_password,
+            style: AppTextStyles.regular16Yellow),
         centerTitle: true,
       ),
       body: Padding(
@@ -48,20 +50,23 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               CustomTextFormField(
                 validator: (txt) {
                   if (txt == null || txt.isEmpty) {
-                    return "Please Enter your Email";
+                    return AppLocalizations.of(context)!
+                        .please_enter_your_email;
                   }
                   else if (!emailRegEx.hasMatch(txt)) {
-                    return "Please Enter a valid Email";
+                    return AppLocalizations.of(context)!
+                        .please_enter_a_valid_email;
                   }
                   return null;
                 },
                 controller: _emailController,
-                hintText: "Email",
+                hintText: AppLocalizations.of(context)!.email,
                 prefixIcon: ImageIcon(
                   AssetImage(AppImages.emailIcon), color: AppColors.white,),
               ),
               CustomElevatedButton(
-                  text: "Verify Email", onPressed: _verifyEmail),
+                  text: AppLocalizations.of(context)!.verify_email,
+                  onPressed: _verifyEmail),
             ],
           ),
         ),

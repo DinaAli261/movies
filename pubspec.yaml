@@ -41,6 +41,11 @@ dependencies:
   google_sign_in: ^7.2.0
   firebase_auth: ^6.1.2
   shared_preferences: ^2.5.3
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  shared_preferences: ^2.5.3
+  flutter_bloc: ^9.1.1
 
 flutter_native_splash:
   background_image: "assets/images/splash.png"
@@ -69,7 +74,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
