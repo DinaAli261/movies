@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/app_colors.dart';
 import '../../utils/app_images.dart';
-import '../bloc/language_bloc.dart';
-import '../bloc/language_event.dart';
+import '../providers/app_language_provider.dart';
+import '../utils/shared_preferences_helper.dart';
 
 class ChooseLanguage extends StatefulWidget {
-  bool isLang;
-
-  ChooseLanguage({super.key, required this.isLang});
+  const ChooseLanguage({super.key});
 
   @override
   State<ChooseLanguage> createState() => _ChooseLanguageState();
 }
 
 class _ChooseLanguageState extends State<ChooseLanguage> {
-  bool isSelectedAr = true;
-  bool isSelectedEN = false;
-
   @override
   Widget build(BuildContext context) {
+    var languageProvider = Provider.of<AppLanguageProvider>(context);
+    bool isSelectedAr = languageProvider.appLanguage == "ar";
+    bool isSelectedEN = languageProvider.appLanguage == "en";
     return Container(
       padding: EdgeInsets.all(1),
       decoration: BoxDecoration(
@@ -35,8 +33,8 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
               setState(() {
                 isSelectedAr = true;
                 isSelectedEN = false;
-                BlocProvider.of<LanguageBloc>(context).add(
-                    ChangeLanguage("ar"));
+                languageProvider.changeLanguage("ar");
+                saveLastLang("ar");
               });
             },
             child: Container(
@@ -55,8 +53,8 @@ class _ChooseLanguageState extends State<ChooseLanguage> {
               setState(() {
                 isSelectedAr = false;
                 isSelectedEN = true;
-                BlocProvider.of<LanguageBloc>(context).add(
-                    ChangeLanguage("en"));
+                languageProvider.changeLanguage("en");
+                saveLastLang("en");
               });
             },
             child: Container(
