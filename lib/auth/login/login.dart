@@ -1,17 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:movies/l10n/app_localizations.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/widgets/choose_language.dart';
-
+import 'package:movies/l10n/app_localizations.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_routes.dart';
 import '../../utils/app_text_styles.dart';
+import '../../utils/dialog_utils.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/custom_text_button.dart';
 import '../../widgets/custom_text_form_filed.dart';
 
 class Login extends StatefulWidget {
-  Login({super.key});
+  const Login({super.key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -111,8 +113,9 @@ class _LoginState extends State<Login> {
                         alignment: AlignmentGeometry.centerRight,
                         child: CustomTextButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed(
-                                AppRoutes.forgetPasswordRouteName);
+                            Navigator.of(
+                              context,
+                            ).pushNamed(AppRoutes.forgetPasswordRouteName);
                           },
                           text: AppLocalizations.of(context)!.forget_password_q,
                           textStyle: AppTextStyles.regular14Yellow,
@@ -172,7 +175,10 @@ class _LoginState extends State<Login> {
                       CustomElevatedButton(
                         text: AppLocalizations.of(context)!.login_with_google,
                         textStyle: AppTextStyles.regular16Grey,
-                        onPressed: () {},
+                        onPressed: () async {
+                          //todo  login with google
+                          signInWithGoogle();
+                        },
                         hasPrefixIcon: true,
                         prefixIcon: ImageIcon(
                           AssetImage(AppImages.googleIcon),
@@ -194,6 +200,48 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignIn signIn = GoogleSignIn.instance;
+      signIn.initialize(
+        serverClientId:
+            "121281015-l0kbclehoone64jcmliknlkbtlj1pjq8.apps.googleusercontent.com",
+      );
+
+      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
+          .authenticate();
+      if (googleUser == null) {
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+      var firebaseUser = userCredential.user;
+
+      DialogUtils.showMessage(
+        context: context,
+        message: 'Login with Google Successfully',
+        posName: 'ok',
+        posAction: () {
+          Navigator.of(context).pushNamed(AppRoutes.homeScreenRouteName);
+        },
+      );
+    } catch (e) {
+      DialogUtils.showMessage(
+        context: context,
+        message: e.toString(),
+        title: 'login failed',
+        posName: 'ok',
+      );
+    }
   }
 
   void login() {
