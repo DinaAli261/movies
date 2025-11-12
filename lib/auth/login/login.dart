@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/widgets/choose_language.dart';
-import 'package:movies/l10n/app_localizations.dart';
+
 import '../../utils/app_colors.dart';
 import '../../utils/app_routes.dart';
 import '../../utils/app_text_styles.dart';
@@ -189,7 +190,7 @@ class _LoginState extends State<Login> {
                       SizedBox(height: height * 0.03),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [ChooseLanguage(isLang: false)],
+                        children: [ChooseLanguage()],
                       ),
                     ],
                   ),

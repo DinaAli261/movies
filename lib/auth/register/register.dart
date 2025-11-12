@@ -236,7 +236,7 @@ class _RegisterState extends State<Register> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [ChooseLanguage(isLang: true)],
+                  children: [ChooseLanguage()],
                 ),
               ],
             ),

@@ -45,6 +45,7 @@ dependencies:
     sdk: flutter
   intl: any
   flutter_bloc: ^9.1.1
+  provider: ^6.1.5+1
 
 flutter_native_splash:
   background_image: "assets/images/splash.png"
