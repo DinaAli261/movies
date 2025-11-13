@@ -41,4 +41,5 @@ class AppImages {
   static const String profileIcon = "assets/images/profileIcon.png";
   static const String searchIcon = "assets/images/searchIcon.png";
   static const String browseIcon = "assets/images/browseIcon.png";
+  static const String emptyIcon = "assets/images/emoty.png";
 }
