@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:movies/api/api_manager.dart';
 import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/widgets/choose_language.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/app_colors.dart';
 import '../../utils/app_routes.dart';
@@ -24,11 +26,11 @@ class _LoginState extends State<Login> {
   final formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController(
-    text: 'route@email.com',
+    text: 'amira_new123@gmail.com',
   );
 
   TextEditingController passwordController = TextEditingController(
-    text: '123456',
+    text: 'Amira123@',
   );
   bool isObscure = true;
 
@@ -60,15 +62,17 @@ class _LoginState extends State<Login> {
                         controller: emailController,
                         validator: (text) {
                           if (text == null || text.trim().isEmpty) {
-                            return AppLocalizations.of(context)!
-                                .please_enter_your_email;
+                            return AppLocalizations.of(
+                              context,
+                            )!.please_enter_your_email;
                           }
                           final bool emailValid = RegExp(
                             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                           ).hasMatch(text);
                           if (!emailValid) {
-                            return AppLocalizations.of(context)!
-                                .please_enter_a_valid_email;
+                            return AppLocalizations.of(
+                              context,
+                            )!.please_enter_a_valid_email;
                           }
                           return null;
                         },
@@ -85,12 +89,14 @@ class _LoginState extends State<Login> {
                         ),
                         validator: (text) {
                           if (text == null || text.trim().isEmpty) {
-                            return AppLocalizations.of(context)!
-                                .please_enter_password;
+                            return AppLocalizations.of(
+                              context,
+                            )!.please_enter_password;
                           }
                           if (text.length < 6) {
-                            return AppLocalizations.of(context)!
-                                .password_should_be_at_least_6_chars;
+                            return AppLocalizations.of(
+                              context,
+                            )!.password_should_be_at_least_6_chars;
                           }
                           return null;
                         },
@@ -133,8 +139,7 @@ class _LoginState extends State<Login> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '${AppLocalizations.of(context)!
-                                .do_not_have_account}  ',
+                            '${AppLocalizations.of(context)!.do_not_have_account}  ',
                             style: AppTextStyles.regular14White,
                           ),
                           CustomTextButton(
@@ -160,8 +165,10 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           SizedBox(width: width * 0.02),
-                          Text(AppLocalizations.of(context)!.or,
-                              style: AppTextStyles.regular15Yellow),
+                          Text(
+                            AppLocalizations.of(context)!.or,
+                            style: AppTextStyles.regular15Yellow,
+                          ),
                           SizedBox(width: width * 0.02),
                           SizedBox(
                             width: width * 0.26,
@@ -245,9 +252,47 @@ class _LoginState extends State<Login> {
     }
   }
 
-  void login() {
+  void login() async {
     if (formKey.currentState?.validate() == true) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.homeScreenRouteName);
+      try {
+        DialogUtils.showLoading(context: context, message: 'Loading...');
+        final response = await ApiManager.login(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+
+        bool isSuccess =
+            response.statusCode == 200 &&
+            response.message.toString().toLowerCase().contains("login");
+
+        if (isSuccess) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString("user_token", response.data);
+          print("TOKEN SAVED: ${response.data}");
+        }
+
+        DialogUtils.showMessage(
+          context: context,
+          title: isSuccess ? "Success" : "Error",
+          message: response.message ?? response.error ?? "Something went wrong",
+          posName: "OK",
+          posAction: isSuccess
+              ? () {
+                  Navigator.of(
+                    context,
+                  ).pushReplacementNamed(AppRoutes.resetPasswordRouteName);
+                }
+              : null,
+        );
+      } catch (e) {
+        Navigator.of(context).pop();
+        DialogUtils.showMessage(
+          context: context,
+          title: "Error",
+          message: e.toString(),
+          posName: "OK",
+        );
+      }
     }
   }
 }
