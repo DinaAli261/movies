@@ -9,8 +9,10 @@ import 'package:movies/widgets/choose_language.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
 import 'package:movies/widgets/custom_text_button.dart';
 import 'package:movies/widgets/custom_text_form_filed.dart';
+import 'package:provider/provider.dart';
 
 import '../../api/api_manager.dart';
+import '../../helpers/token_manager.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/dialog_utils.dart';
 
@@ -266,6 +268,7 @@ class _RegisterState extends State<Register> {
           context: context,
           message: 'Creating account...',
         );
+
         final response = await ApiManager.register(
           name: name.text.trim(),
           email: email.text.trim(),
@@ -274,7 +277,27 @@ class _RegisterState extends State<Register> {
           phone: phoneNumber.text.trim(),
           avaterId: currentIndex + 1,
         );
+
         DialogUtils.hideLoading(context);
+        if (response.message != null) {
+          await UserManager.saveToken(response.data['token']);
+          await UserManager.saveUserData(
+            name: response.data['name'],
+            email: response.data['email'],
+            phone: response.data['phone'],
+            avaterId: response.data['avaterId'],
+          );
+
+          var userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.updateUser(
+            MyUser(
+              name: response.data['name'],
+              email: response.data['email'],
+              phone: response.data['phone'],
+              avaterId: response.data['avaterId'],
+            ),
+          );
+        }
 
         bool isSuccess = response.message == "User created successfully";
 

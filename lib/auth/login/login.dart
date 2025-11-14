@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:movies/api/api_manager.dart';
 import 'package:movies/l10n/app_localizations.dart';
-import 'package:movies/model/my_user.dart';
-import 'package:movies/providers/user_provider.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/widgets/choose_language.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:provider/provider.dart';
+
+import '../../helpers/token_manager.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_routes.dart';
 import '../../utils/app_text_styles.dart';
@@ -32,15 +30,14 @@ class _LoginState extends State<Login> {
   );
 
   TextEditingController passwordController = TextEditingController(
-    text: 'Amira123@',
+    text: 'Amira321@',
   );
   bool isObscure = true;
-  late UserProvider userProvider;
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -236,10 +233,7 @@ class _LoginState extends State<Login> {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithCredential(credential);
       var firebaseUser = userCredential.user;
-      MyUser myUser = MyUser(id: firebaseUser?.uid ?? '',
-          email: firebaseUser?.email ?? '',
-          name: firebaseUser?.displayName ?? '');
-      userProvider.updateUser(myUser);
+
       DialogUtils.showMessage(
         context: context,
         message: 'Login with Google Successfully',
@@ -272,8 +266,7 @@ class _LoginState extends State<Login> {
             response.message.toString().toLowerCase().contains("login");
 
         if (isSuccess) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString("user_token", response.data);
+          await UserManager.saveToken(response.data);
           print("TOKEN SAVED: ${response.data}");
         }
 
