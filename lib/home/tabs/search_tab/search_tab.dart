@@ -44,9 +44,11 @@ class _SearchTabState extends State<SearchTab> {
     bool isWritten = searchController.text.isNotEmpty;
 
     return Scaffold(
-        body: SafeArea(child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 0.037 * width,
+        body: Padding(
+          padding: EdgeInsets.only(
+            top: 0.06 * height,
+            left: 0.037 * width,
+            right: 0.037 * width,
           ),
           child: Column(
             children: [
@@ -56,10 +58,10 @@ class _SearchTabState extends State<SearchTab> {
                   hintText: AppLocalizations.of(context)!.search,
                   prefixIcon: ImageIcon(
                     AssetImage(AppImages.searchIcon), color: AppColors.white,)),
-              SizedBox(height: height * 0.013,),
               Expanded(child: (!isWritten)
                   ? Image.asset(AppImages.emptyIcon)
                   : GridView.builder(
+                padding: EdgeInsets.only(top: height * 0.013),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: height * 0.009,
@@ -75,7 +77,7 @@ class _SearchTabState extends State<SearchTab> {
                 },))
             ],
           ),
-        ))
+        )
     );
   }
 }
