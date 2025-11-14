@@ -16,19 +16,34 @@ import 'package:movies/utils/app_theme.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
+import 'helpers/token_manager.dart';
 import 'l10n/app_localizations.dart';
+import 'model/my_user.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final userData = await UserManager.getUserData();
+  MyUser? currentUser;
+  if (userData.isNotEmpty && userData['id'] != null) {
+    currentUser = MyUser(
+      id: userData['id'],
+      name: userData['name'],
+      email: userData['email'],
+      phone: userData['phone'],
+      avaterId: userData['avaterId'] ?? 1,
+    );
+  }
+
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   FlutterNativeSplash.remove();
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => AppLanguageProvider(),),
-        ChangeNotifierProvider(
-          create: (context) => UserProvider(),)
+        ChangeNotifierProvider(create: (_) =>
+        UserProvider()
+          ..updateUser(currentUser!)),
       ],
       child: MyApp()),);
 

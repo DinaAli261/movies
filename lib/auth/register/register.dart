@@ -9,8 +9,12 @@ import 'package:movies/widgets/choose_language.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
 import 'package:movies/widgets/custom_text_button.dart';
 import 'package:movies/widgets/custom_text_form_filed.dart';
+import 'package:provider/provider.dart';
 
 import '../../api/api_manager.dart';
+import '../../helpers/token_manager.dart';
+import '../../model/my_user.dart';
+import '../../providers/user_provider.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/dialog_utils.dart';
 
@@ -266,6 +270,7 @@ class _RegisterState extends State<Register> {
           context: context,
           message: 'Creating account...',
         );
+
         final response = await ApiManager.register(
           name: name.text.trim(),
           email: email.text.trim(),
@@ -274,9 +279,33 @@ class _RegisterState extends State<Register> {
           phone: phoneNumber.text.trim(),
           avaterId: currentIndex + 1,
         );
+
         DialogUtils.hideLoading(context);
 
-        bool isSuccess = response.message == "User created successfully";
+        if (response.data != null && response.data is Map<String, dynamic>) {
+          var data = response.data as Map<String, dynamic>;
+          await UserManager.saveToken(data['token']?.toString() ?? "");
+          await UserManager.saveUserData(
+            id: data['id']?.toString() ?? "",
+            name: data['name']?.toString() ?? "",
+            email: data['email']?.toString() ?? "",
+            phone: data['phone']?.toString() ?? "",
+            avaterId: data['avaterId'] ?? 1,
+          );
+          var userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.updateUser(
+            MyUser(
+              id: data['id']?.toString() ?? "",
+              name: data['name']?.toString() ?? "",
+              email: data['email']?.toString() ?? "",
+              phone: data['phone']?.toString() ?? "",
+              avaterId: data['avaterId'] ?? 1,
+            ),
+          );
+        }
+
+        bool isSuccess =
+            response.message?.toLowerCase() == "user created successfully";
 
         DialogUtils.showMessage(
           context: context,
