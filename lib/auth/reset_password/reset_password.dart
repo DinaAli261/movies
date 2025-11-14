@@ -5,6 +5,9 @@ import 'package:movies/utils/app_images.dart';
 import 'package:movies/utils/app_text_styles.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
 import 'package:movies/widgets/custom_text_form_filed.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../api/api_manager.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({super.key});
@@ -38,8 +41,10 @@ class _ResetPasswordState extends State<ResetPassword> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.reset_password,
-            style: AppTextStyles.regular16Yellow),
+        title: Text(
+          AppLocalizations.of(context)!.reset_password,
+          style: AppTextStyles.regular16Yellow,
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -68,21 +73,20 @@ class _ResetPasswordState extends State<ResetPassword> {
                   },
                   child: (isObscureOld)
                       ? ImageIcon(
-                    AssetImage(AppImages.passwordIcon2),
-                    color: AppColors.white,
-                  )
+                          AssetImage(AppImages.passwordIcon2),
+                          color: AppColors.white,
+                        )
                       : Icon(Icons.remove_red_eye, color: AppColors.white),
                 ),
                 //todo: update validator from api
                 validator: (text) {
-                  if (text == null || text
-                      .trim()
-                      .isEmpty) {
+                  if (text == null || text.trim().isEmpty) {
                     return AppLocalizations.of(context)!.please_enter_password;
                   }
                   if (text.length < 6) {
-                    return AppLocalizations.of(context)!
-                        .password_should_be_at_least_6_chars;
+                    return AppLocalizations.of(
+                      context,
+                    )!.password_should_be_at_least_6_chars;
                   }
                   return null;
                 },
@@ -104,20 +108,19 @@ class _ResetPasswordState extends State<ResetPassword> {
                   },
                   child: (isObscureNew)
                       ? ImageIcon(
-                    AssetImage(AppImages.passwordIcon2),
-                    color: AppColors.white,
-                  )
+                          AssetImage(AppImages.passwordIcon2),
+                          color: AppColors.white,
+                        )
                       : Icon(Icons.remove_red_eye, color: AppColors.white),
                 ),
                 validator: (text) {
-                  if (text == null || text
-                      .trim()
-                      .isEmpty) {
+                  if (text == null || text.trim().isEmpty) {
                     return AppLocalizations.of(context)!.please_enter_password;
                   }
                   if (text.length < 6) {
-                    return AppLocalizations.of(context)!
-                        .password_should_be_at_least_6_chars;
+                    return AppLocalizations.of(
+                      context,
+                    )!.password_should_be_at_least_6_chars;
                   }
                   return null;
                 },
@@ -138,28 +141,27 @@ class _ResetPasswordState extends State<ResetPassword> {
                   },
                   child: (isObscureConfirm)
                       ? ImageIcon(
-                    AssetImage(AppImages.passwordIcon2),
-                    color: AppColors.white,
-                  )
+                          AssetImage(AppImages.passwordIcon2),
+                          color: AppColors.white,
+                        )
                       : Icon(Icons.remove_red_eye, color: AppColors.white),
                 ),
                 validator: (text) {
-                  if (text == null || text
-                      .trim()
-                      .isEmpty) {
+                  if (text == null || text.trim().isEmpty) {
                     return AppLocalizations.of(context)!.please_enter_password;
                   }
                   if (text != newPasswordController.text) {
-                    return AppLocalizations.of(context)!
-                        .this_password_is_incorrect;
+                    return AppLocalizations.of(
+                      context,
+                    )!.this_password_is_incorrect;
                   }
                   return null;
                 },
               ),
               CustomElevatedButton(
-                  text: AppLocalizations.of(context)!.reset_password,
-                  textStyle: AppTextStyles.regular20Black,
-                  onPressed: resetPassword
+                text: AppLocalizations.of(context)!.reset_password,
+                textStyle: AppTextStyles.regular20Black,
+                onPressed: resetPassword,
               ),
             ],
           ),
@@ -168,9 +170,42 @@ class _ResetPasswordState extends State<ResetPassword> {
     );
   }
 
-  void resetPassword() {
+  void resetPassword() async {
     if (_formKey.currentState?.validate() == true) {
-      //todo register
+      final oldPassword = oldPasswordController.text.trim();
+      final newPassword = newPasswordController.text.trim();
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("user_token");
+
+      if (token == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Token not found. Please login again.")),
+        );
+        return;
+      }
+
+      try {
+        final response = await ApiManager.resetPassword(
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+          token: token,
+        );
+
+        if (response.message != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(response.message!)));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Something went wrong!")),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      }
     }
   }
 }

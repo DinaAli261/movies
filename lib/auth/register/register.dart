@@ -10,7 +10,9 @@ import 'package:movies/widgets/custom_elevated_button.dart';
 import 'package:movies/widgets/custom_text_button.dart';
 import 'package:movies/widgets/custom_text_form_filed.dart';
 
+import '../../api/api_manager.dart';
 import '../../utils/app_colors.dart';
+import '../../utils/dialog_utils.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -18,6 +20,7 @@ class Register extends StatefulWidget {
   @override
   State<Register> createState() => _RegisterState();
 }
+
 class _RegisterState extends State<Register> {
   bool isObscureConfirmPassword = true;
   bool isObscurePassword = true;
@@ -47,8 +50,10 @@ class _RegisterState extends State<Register> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.register,
-            style: AppTextStyles.regular16Yellow),
+        title: Text(
+          AppLocalizations.of(context)!.register,
+          style: AppTextStyles.regular16Yellow,
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -113,8 +118,9 @@ class _RegisterState extends State<Register> {
                   prefixIcon: Image.asset(AppImages.updateNameIcon),
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
-                      return AppLocalizations.of(context)!
-                          .please_enter_your_name;
+                      return AppLocalizations.of(
+                        context,
+                      )!.please_enter_your_name;
                     }
                     return null;
                   },
@@ -125,15 +131,17 @@ class _RegisterState extends State<Register> {
                   prefixIcon: Image.asset(AppImages.emailIcon),
                   validator: (text) {
                     if (text == null || text.isEmpty) {
-                      return AppLocalizations.of(context)!
-                          .please_enter_your_email;
+                      return AppLocalizations.of(
+                        context,
+                      )!.please_enter_your_email;
                     }
                     bool emailRegEx = RegExp(
                       r"^[\w.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$",
                     ).hasMatch(text);
                     if (!emailRegEx) {
-                      return AppLocalizations.of(context)!
-                          .please_enter_a_valid_email;
+                      return AppLocalizations.of(
+                        context,
+                      )!.please_enter_a_valid_email;
                     }
                     return null;
                   },
@@ -146,12 +154,14 @@ class _RegisterState extends State<Register> {
                   obscureText: isObscurePassword,
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
-                      return AppLocalizations.of(context)!
-                          .please_enter_password;
+                      return AppLocalizations.of(
+                        context,
+                      )!.please_enter_password;
                     }
                     if (text.length < 6) {
-                      return AppLocalizations.of(context)!
-                          .password_should_be_at_least_6_chars;
+                      return AppLocalizations.of(
+                        context,
+                      )!.password_should_be_at_least_6_chars;
                     }
                     return null;
                   },
@@ -177,12 +187,14 @@ class _RegisterState extends State<Register> {
                   obscureText: isObscureConfirmPassword,
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
-                      return AppLocalizations.of(context)!
-                          .please_enter_password;
+                      return AppLocalizations.of(
+                        context,
+                      )!.please_enter_password;
                     }
                     if (text != password.text) {
-                      return AppLocalizations.of(context)!
-                          .this_password_is_incorrect;
+                      return AppLocalizations.of(
+                        context,
+                      )!.this_password_is_incorrect;
                     }
                     return null;
                   },
@@ -206,8 +218,9 @@ class _RegisterState extends State<Register> {
                   prefixIcon: Image.asset(AppImages.phoneIcon),
                   validator: (text) {
                     if (text == null || text.trim().isEmpty) {
-                      return AppLocalizations.of(context)!
-                          .please_enter_your_phone_number;
+                      return AppLocalizations.of(
+                        context,
+                      )!.please_enter_your_phone_number;
                     }
                     return null;
                   },
@@ -246,9 +259,47 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  void register() {
+  void register() async {
     if (_formKey.currentState?.validate() == true) {
-      //todo register
+      try {
+        DialogUtils.showLoading(
+          context: context,
+          message: 'Creating account...',
+        );
+        final response = await ApiManager.register(
+          name: name.text.trim(),
+          email: email.text.trim(),
+          password: password.text.trim(),
+          confirmPassword: confirmPassword.text.trim(),
+          phone: phoneNumber.text.trim(),
+          avaterId: currentIndex + 1,
+        );
+        DialogUtils.hideLoading(context);
+
+        bool isSuccess = response.message == "User created successfully";
+
+        DialogUtils.showMessage(
+          context: context,
+          title: isSuccess ? "Success" : "Error",
+          message: response.message ?? response.error ?? "Registration failed",
+          posName: "OK",
+          posAction: isSuccess
+              ? () {
+                  Navigator.of(
+                    context,
+                  ).pushReplacementNamed(AppRoutes.loginRouteName);
+                }
+              : null,
+        );
+      } catch (e) {
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(
+          context: context,
+          title: "Error",
+          message: e.toString(),
+          posName: "OK",
+        );
+      }
     }
   }
 }
