@@ -280,7 +280,7 @@ class _LoginState extends State<Login> {
               ? () {
                   Navigator.of(
                     context,
-                  ).pushReplacementNamed(AppRoutes.resetPasswordRouteName);
+                  ).pushReplacementNamed(AppRoutes.homeScreenRouteName);
                 }
               : null,
         );
