@@ -5,7 +5,7 @@ import 'package:movies/utils/app_images.dart';
 import 'package:movies/widgets/custom_text_form_filed.dart';
 
 class SearchTab extends StatefulWidget {
-  SearchTab({super.key});
+  const SearchTab({super.key});
 
   @override
   State<SearchTab> createState() => _SearchTabState();
