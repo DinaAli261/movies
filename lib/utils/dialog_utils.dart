@@ -70,7 +70,7 @@ class DialogUtils {
             content: Row(
               children: [
                 const CircularProgressIndicator(
-                  color: Colors.yellow,
+                  color: AppColors.yellow,
                 ),
                 const SizedBox(width: 16),
                 Text(

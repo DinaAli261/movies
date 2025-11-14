@@ -1,8 +1,10 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:movies/api/api_constants.dart';
 import 'package:movies/api/end_points.dart';
 import 'package:movies/model/LoginResponse.dart';
+import 'package:movies/model/RegisterResponse.dart';
 
 import '../model/ResetPasswordResponse.dart';
 
@@ -29,7 +31,7 @@ class ApiManager {
     );
   }
 
-  static Future<LoginResponse> register({
+  static Future<RegisterResponse> register({
     required String name,
     required String email,
     required String password,
@@ -53,7 +55,7 @@ class ApiManager {
     );
 
     var json = jsonDecode(response.body);
-    return LoginResponse.fromJson(json);
+    return RegisterResponse.fromJson(json);
   }
 
   static Future<ResetPasswordModel> resetPassword({
