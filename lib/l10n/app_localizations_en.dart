@@ -166,4 +166,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get action => 'Action';
+  String get adventure => 'Adventure';
+
+  @override
+  String get animation => 'Animation';
+
+  @override
+  String get comedy => 'Comedy';
+
+  @override
+  String get family => 'Family';
+
+  @override
+  String get fantasy => 'Fantasy';
 }

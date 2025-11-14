@@ -16,22 +16,38 @@ import 'package:movies/utils/app_theme.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
+import 'helpers/token_manager.dart';
 import 'l10n/app_localizations.dart';
+import 'model/my_user.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final userData = await UserManager.getUserData();
+  MyUser? currentUser;
+  if (userData.isNotEmpty && userData['id'] != null) {
+    currentUser = MyUser(
+      id: userData['id'],
+      name: userData['name'],
+      email: userData['email'],
+      phone: userData['phone'],
+      avaterId: userData['avaterId'] ?? 1,
+    );
+  }
+
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   FlutterNativeSplash.remove();
-  runApp(MultiProvider(
+  runApp(
+    MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => AppLanguageProvider()),
         ChangeNotifierProvider(
-          create: (context) => AppLanguageProvider(),),
-        ChangeNotifierProvider(
-          create: (context) => UserProvider(),)
+          create: (_) => UserProvider()..updateUser(currentUser!),
+        ),
       ],
-      child: MyApp()),);
-
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -54,11 +70,19 @@ class MyApp extends StatelessWidget {
         AppRoutes.registerRouteName: (context) => Register(),
         AppRoutes.forgetPasswordRouteName: (context) => ForgetPassword(),
         AppRoutes.resetPasswordRouteName: (context) => ResetPassword(),
-        AppRoutes.updateProfileRouteName: (context) => UpdateProfile(),
-        AppRoutes.movieDetailsRouteName: (context) => MovieDetails()
+        AppRoutes.updateProfileRouteName: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map;
+
+          return UpdateProfile(
+            name: args['name'],
+            phone: args['phone'],
+            avatarIndex: args['avatarIndex'],
+          );
+        },
+        AppRoutes.movieDetailsRouteName: (context) => MovieDetails(),
       },
       themeMode: ThemeMode.dark,
       theme: AppTheme.darkTheme,
     );
   }
-  }
+}

@@ -50,4 +50,9 @@
   "search": "بحث",
   "see_more": "عرض المزيد",
   "action": "أكشن"
+  "adventure":"مغامرة",
+  "animation":"رسوم متحركة",
+  "comedy":"كوميديا",
+  "family":"عائلي",
+  "fantasy":"خيال"
 }

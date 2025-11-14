@@ -123,7 +123,9 @@ class _OnBoardingState extends State<OnBoarding> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                CustomElevatedButton(text: "Explore Now", onPressed: _nextPage),
+                CustomElevatedButton(
+                    text: AppLocalizations.of(context)!.explore_now,
+                    onPressed: _nextPage),
                 const SizedBox(height: 32),
               ],
             ),

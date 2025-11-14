@@ -12,9 +12,10 @@ class DialogUtils {
     Function? negAction,
     String? negName,
   }) {
-    List<Widget>? action = [];
+    List<Widget> actions = [];
+
     if (posAction != null) {
-      action.add(
+      actions.add(
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.transparent,
@@ -30,7 +31,7 @@ class DialogUtils {
     }
 
     if (negAction != null) {
-      action.add(
+      actions.add(
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.transparent,
@@ -44,14 +45,45 @@ class DialogUtils {
         ),
       );
     }
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.black,
         title: Text(title ?? '', style: AppTextStyles.regular16Yellow),
         content: Text(message, style: AppTextStyles.regular14Yellow),
-        actions: action,
+        actions: actions,
       ),
     );
+  }
+
+  static void showLoading({
+    required BuildContext context,
+    String message = 'Loading...',
+  }) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) =>
+          AlertDialog(
+            backgroundColor: AppColors.black,
+            content: Row(
+              children: [
+                const CircularProgressIndicator(
+                  color: AppColors.yellow,
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  message,
+                  style: AppTextStyles.regular14Yellow,
+                ),
+              ],
+            ),
+          ),
+    );
+  }
+
+  static void hideLoading(BuildContext context) {
+    Navigator.pop(context);
   }
 }
