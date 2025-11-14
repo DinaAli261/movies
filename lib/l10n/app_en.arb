@@ -47,5 +47,10 @@
 "finish":"Finish",
 "next":"Next",
 "back":"Back",
-"search":"Search"
+"search":"Search",
+"adventure":"Adventure",
+"animation":"Animation",
+"comedy":"Comedy",
+"family":"Family",
+"fantasy":"Fantasy"
 }
