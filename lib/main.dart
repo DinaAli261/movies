@@ -9,6 +9,7 @@ import 'package:movies/home/home_screen.dart';
 import 'package:movies/movie_details/movie_details.dart';
 import 'package:movies/on_boarding/on_boarding.dart';
 import 'package:movies/providers/app_language_provider.dart';
+import 'package:movies/providers/user_provider.dart';
 import 'package:movies/update_profile/update_profile.dart';
 import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_theme.dart';
@@ -22,12 +23,15 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   FlutterNativeSplash.remove();
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => AppLanguageProvider(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AppLanguageProvider(),),
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),)
+      ],
+      child: MyApp()),);
+
 }
 
 class MyApp extends StatelessWidget {
