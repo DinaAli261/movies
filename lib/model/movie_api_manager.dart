@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 import 'movies/movie_response.dart';
 
-class MovieApiManager {
+class MovieApiManager{
   static const String baseUrl = 'https://yts.mx/api/v2';
 
   Future<MovieResponse> getMovies({

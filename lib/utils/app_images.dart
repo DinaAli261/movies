@@ -42,4 +42,6 @@ class AppImages {
   static const String searchIcon = "assets/images/searchIcon.png";
   static const String browseIcon = "assets/images/browseIcon.png";
   static const String emptyIcon = "assets/images/emoty.png";
+  static const String availableNow = "assets/images/Available_Now.png";
+  static const String watchNow = "assets/images/Watch_Now.png";
 }

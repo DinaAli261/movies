@@ -163,6 +163,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get search => 'بحث';
 
   @override
+  String get see_more => 'عرض المزيد';
+
+  @override
+  String get action => 'أكشن';
   String get adventure => 'مغامرة';
 
   @override
