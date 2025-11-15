@@ -1,7 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserManager {
-  // ======== Token ========
   static Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userToken', token);
@@ -16,8 +15,6 @@ class UserManager {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('userToken');
   }
-
-  // ======== User Data ========
   static Future<void> saveUserData({
     required String id,
     required String name,
