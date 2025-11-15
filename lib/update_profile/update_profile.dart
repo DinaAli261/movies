@@ -8,8 +8,14 @@ import 'package:movies/utils/app_text_styles.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
 import 'package:movies/widgets/custom_text_button.dart';
 import 'package:movies/widgets/custom_text_form_filed.dart';
+import 'package:provider/provider.dart';
 
+import '../api/api_manager.dart';
+import '../helpers/token_manager.dart';
 import '../l10n/app_localizations.dart';
+import '../model/my_user.dart';
+import '../providers/user_provider.dart';
+import '../utils/dialog_utils.dart';
 
 class UpdateProfile extends StatefulWidget {
   final String name;
@@ -123,7 +129,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
               CustomElevatedButton(
                 text: AppLocalizations.of(context)!.delete_account,
                 textStyle: AppTextStyles.regular20White,
-                onPressed: () {},
+                onPressed: () {
+                  deleteAccount();
+                },
                 backgroundColor: AppColors.red,
                 borderColor: AppColors.red,
               ),
@@ -157,9 +165,105 @@ class _UpdateProfileState extends State<UpdateProfile> {
     );
   }
 
-  void updateAccount() {
+  void updateAccount() async {
     if (_formKey.currentState?.validate() == true) {
-      // todo: API update request
+      DialogUtils.showLoading(context: context, message: "Updating...");
+      final token = await UserManager.getToken();
+      if (token == null) {
+        DialogUtils.showMessage(
+          context: context,
+          title: "Error",
+          message: "Token not found, please login again",
+          posName: "OK",
+        );
+        return;
+      }
+      final response = await ApiManager.updateProfile(
+        name: nameController.text.trim(),
+        phone: phoneController.text.trim(),
+        avaterId: AvatarsBottomSheet.selectedIndex + 1,
+        token: token,
+      );
+
+      if (response.message != null) {
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.updateUser(
+          MyUser(
+            id: userProvider.currentUser!.id,
+            name: nameController.text.trim(),
+            email: userProvider.currentUser!.email,
+            phone: userProvider.currentUser!.phone,
+            avaterId: AvatarsBottomSheet.selectedIndex + 1,
+          ),
+        );
+        Navigator.pop(context);
+
+        DialogUtils.showMessage(
+          context: context,
+          title: "Success",
+          message: response.message ?? "Profile updated successfully",
+          posName: "OK",
+        );
+      } else {
+        DialogUtils.showMessage(
+          context: context,
+          title: "Error",
+          message: "Failed to update profile",
+          posName: "OK",
+        );
+      }
+    }
+  }
+
+  void deleteAccount() async {
+    bool confirm = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Confirm Delete"),
+        content: Text("Are you sure you want to delete your account?"),
+        actions: [
+          TextButton(
+            child: Text("Cancel"),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+          TextButton(
+            child: Text("Delete"),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm) {
+      DialogUtils.showLoading(context: context, message: "Deleting account...");
+
+      final token = await UserManager.getToken();
+      final response = await ApiManager.deleteProfile(token: token!);
+
+      DialogUtils.hideLoading(context);
+
+      if (response.message != null) {
+        await UserManager.clearUserData();
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.loginRouteName,
+          (route) => false,
+        );
+
+        DialogUtils.showMessage(
+          context: context,
+          title: "Deleted",
+          message: response.message!,
+          posName: "OK",
+        );
+      } else {
+        DialogUtils.showMessage(
+          context: context,
+          title: "Error",
+          message: "Failed to delete account",
+          posName: "OK",
+        );
+      }
     }
   }
 }
