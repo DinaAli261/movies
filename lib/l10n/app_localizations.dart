@@ -403,6 +403,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Action'**
   String get action;
+
   /// No description provided for @adventure.
   ///
   /// In en, this message translates to:

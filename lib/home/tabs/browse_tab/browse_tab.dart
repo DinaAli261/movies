@@ -3,6 +3,10 @@ import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_text_styles.dart';
 
+import '../../../model/movie_api_manager.dart';
+import '../../../model/movies/movie_response.dart';
+import '../home_tab/widget/movie_item.dart';
+
 class BrowseTab extends StatefulWidget {
   const BrowseTab({super.key});
 
@@ -11,7 +15,17 @@ class BrowseTab extends StatefulWidget {
 }
 
 class _BrowseTabState extends State<BrowseTab> {
+  final MovieApiManager _movieService = MovieApiManager();
+  List<Movie> movies = [];
+  bool isLoading = true;
+  String error = '';
   int selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMovies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +79,12 @@ class _BrowseTabState extends State<BrowseTab> {
                   },).toList(),
                 ),
               ),
-              Expanded(child: GridView.builder(
+              Expanded(child: (movies.isEmpty) ? Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.yellow,
+                ),
+              )
+                  : GridView.builder(
                 padding: EdgeInsets.only(top: height * 0.027),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -75,14 +94,34 @@ class _BrowseTabState extends State<BrowseTab> {
                 ),
                 itemBuilder: (context, index) {
                   //todo : reusable widget movie from api
-                  return Container(
-                    height: 297, width: 191,
-                    color: AppColors.yellow,
-                  );
+                  return MovieItem(index: index,
+                    movie: movies[index],
+                    height: 0.299,
+                    width: 0.444,);
                 },))
             ],
           ),
         )
     );
+  }
+
+  Future<void> _loadMovies() async {
+    try {
+      setState(() {
+        isLoading = true;
+        error = '';
+      });
+
+      final response = await _movieService.getMovies();
+      setState(() {
+        movies = response.data.movies;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        error = 'Failed to load movies: $e';
+        isLoading = false;
+      });
+    }
   }
 }

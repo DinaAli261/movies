@@ -26,11 +26,11 @@ class _LoginState extends State<Login> {
   final formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController(
-    text: 'amiraa9876@gmail.com',
+    text: 'malak.ahmed91@gmail.com',
   );
 
   TextEditingController passwordController = TextEditingController(
-    text: 'Amira9876@',
+    text: 'Malak123@',
   );
   bool isObscure = true;
 

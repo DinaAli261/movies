@@ -1,13 +1,21 @@
 import 'dart:convert';
-import 'movies/movie_response.dart';
+
 import 'package:http/http.dart' as http;
+
+import 'movies/movie_response.dart';
 
 class MovieApiManager{
   static const String baseUrl = 'https://yts.mx/api/v2';
 
-  Future<MovieResponse> getMovies({int page = 1, String quality = 'All', String genre = ''}) async {
+  Future<MovieResponse> getMovies({
+    int page = 1,
+    String quality = 'All',
+    String genre = '',
+  }) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/list_movies.json?page=$page&quality=$quality${genre.isNotEmpty ? '&genre=$genre' : ''}'),
+      Uri.parse(
+        '$baseUrl/list_movies.json?page=$page&quality=$quality${genre.isNotEmpty ? '&genre=$genre' : ''}',
+      ),
     );
 
     if (response.statusCode == 200) {
