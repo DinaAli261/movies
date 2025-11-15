@@ -37,7 +37,7 @@ class _HomeTabState extends State<HomeTab> {
         body: (movies.isEmpty)
             ? Center(child: CircularProgressIndicator(color: AppColors.yellow))
             : Column(
-                crcrossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Stack(
               alignment: Alignment.topCenter,

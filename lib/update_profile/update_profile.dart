@@ -51,6 +51,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
+    int avatarIndex = AvatarsBottomSheet.selectedIndex;
+    if (avatarIndex < 0 || avatarIndex >= Account.avatars.length) {
+      avatarIndex = 0;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -74,7 +79,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   showAvatarsBottomSheet(height);
                 },
                 child: Image.asset(
-                  Account.avatars[AvatarsBottomSheet.selectedIndex],
+                  Account.avatars[avatarIndex],
                   width: 0.35 * width,
                   height: 0.16 * height,
                   fit: BoxFit.fitHeight,
