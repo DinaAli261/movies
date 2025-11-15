@@ -167,6 +167,8 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get action => 'أكشن';
+
+  @override
   String get adventure => 'مغامرة';
 
   @override

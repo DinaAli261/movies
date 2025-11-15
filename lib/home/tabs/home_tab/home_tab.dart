@@ -1,11 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:movies/home/tabs/home_tab/widget/movie_item.dart';
 import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/model/movie_api_manager.dart';
 import 'package:movies/providers/app_language_provider.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_text_styles.dart';
-import 'package:movies/widgets/movie_item.dart';
 
 import '../../../model/movies/movie_response.dart';
 import '../../../utils/app_images.dart';
@@ -34,8 +34,10 @@ class _HomeTabState extends State<HomeTab> {
     var languageProvider = AppLanguageProvider();
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        body: (movies.isEmpty)
+            ? Center(child: CircularProgressIndicator(color: AppColors.yellow))
+            : Column(
+                crcrossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Stack(
               alignment: Alignment.topCenter,
@@ -154,7 +156,11 @@ class _HomeTabState extends State<HomeTab> {
                 scrollDirection: Axis.horizontal,
 
                 itemBuilder: (context, index) {
-                  return MovieItem(index: index, movie: movies[index]);;
+                  return MovieItem(
+                    index: index,
+                    movie: movies[index],
+                    height: 0.24,
+                    width: 0.3395,);
 
                 },
                 itemCount: movies.length, separatorBuilder: (BuildContext context, int index) { return SizedBox(width: size.width*0.045,); },

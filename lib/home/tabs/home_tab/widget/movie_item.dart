@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:movies/model/movie_api_manager.dart';
 
-import '../model/movies/movie_response.dart';
-import '../utils/app_colors.dart';
-import '../utils/app_text_styles.dart';
+import '../../../../model/movies/movie_response.dart';
+import '../../../../utils/app_colors.dart';
+import '../../../../utils/app_text_styles.dart';
 
 class MovieItem extends StatelessWidget {
   late int index;
   late Movie movie;
+  double height;
+  double width;
 
-  MovieItem({super.key, required this.index, required this.movie});
+  MovieItem(
+      {super.key, required this.index, required this.movie, required this.height, required this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +21,8 @@ class MovieItem extends StatelessWidget {
       children: [
         Container(
           clipBehavior: Clip.antiAlias,
-          height: size.height * 0.24,
-          width: size.width / 2.5,
+          height: size.height * height,
+          width: size.width * width,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
           child: Image.network(
             movie.mediumCoverImage,

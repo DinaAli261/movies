@@ -49,10 +49,10 @@
   "back": "Back",
   "search": "Search",
   "see_more": "See More",
-  "action": "Action"
-  "adventure":"Adventure",
-  "animation":"Animation",
-  "comedy":"Comedy",
-  "family":"Family",
-  "fantasy":"Fantasy"
+  "action": "Action",
+  "adventure": "Adventure",
+  "animation": "Animation",
+  "comedy": "Comedy",
+  "family": "Family",
+  "fantasy": "Fantasy"
 }

@@ -4,6 +4,10 @@ import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/widgets/custom_text_form_filed.dart';
 
+import '../../../model/movie_api_manager.dart';
+import '../../../model/movies/movie_response.dart';
+import '../home_tab/widget/movie_item.dart';
+
 class SearchTab extends StatefulWidget {
   const SearchTab({super.key});
 
@@ -12,12 +16,17 @@ class SearchTab extends StatefulWidget {
 }
 
 class _SearchTabState extends State<SearchTab> {
+  final MovieApiManager _movieService = MovieApiManager();
+  List<Movie> movies = [];
+  bool isLoading = true;
+  String error = '';
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _loadMovies();
     searchController.addListener(() {
       setState(() {
 
@@ -70,14 +79,34 @@ class _SearchTabState extends State<SearchTab> {
                 ),
                 itemBuilder: (context, index) {
                   //todo : reusable widget movie from api
-                  return Container(
-                    height: 297, width: 191,
-                    color: AppColors.yellow,
-                  );
+                  return MovieItem(index: index,
+                    movie: movies[index],
+                    height: 0.299,
+                    width: 0.444,);
                 },))
             ],
           ),
         )
     );
+  }
+
+  Future<void> _loadMovies() async {
+    try {
+      setState(() {
+        isLoading = true;
+        error = '';
+      });
+
+      final response = await _movieService.getMovies();
+      setState(() {
+        movies = response.data.movies;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        error = 'Failed to load movies: $e';
+        isLoading = false;
+      });
+    }
   }
 }
