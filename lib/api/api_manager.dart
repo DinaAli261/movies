@@ -6,7 +6,9 @@ import 'package:movies/api/end_points.dart';
 import 'package:movies/model/LoginResponse.dart';
 import 'package:movies/model/RegisterResponse.dart';
 
+import '../model/DeleteProfileResponse.dart';
 import '../model/ResetPasswordResponse.dart';
+import '../model/UpdateProfileResponse.dart';
 
 class ApiManager {
   static Future<LoginResponse> login({
@@ -81,5 +83,45 @@ class ApiManager {
 
     var json = jsonDecode(response.body);
     return ResetPasswordModel.fromJson(json);
+  }
+
+  static Future<UpdateProfileResponse> updateProfile({
+    required String name,
+    required String phone,
+    required int avaterId,
+    required String token,
+  }) async {
+    Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.updateProfileApi);
+
+    var body = {"name": name, "phone": phone, "avaterId": avaterId};
+
+    var response = await http.patch(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(body),
+    );
+
+    var json = jsonDecode(response.body);
+    return UpdateProfileResponse.fromJson(json);
+  }
+
+  static Future<DeleteProfileResponse> deleteProfile({
+    required String token,
+  }) async {
+    Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.deleteProfileApi);
+
+    var response = await http.delete(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    var json = jsonDecode(response.body);
+    return DeleteProfileResponse.fromJson(json);
   }
 }
