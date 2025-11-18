@@ -4,4 +4,5 @@ class EndPoints {
   static const String resetPasswordApi = '/auth/reset-password';
   static const String updateProfileApi = '/profile';
   static const String deleteProfileApi = '/profile';
+  static const String detailsApi = '/api/v2/movie_details.json';
 }

@@ -12,8 +12,9 @@ import '../../../model/account.dart';
 import '../../../utils/app_routes.dart';
 
 class ProfileTab extends StatelessWidget {
-  const ProfileTab({super.key});
+  ProfileTab({super.key});
 
+  bool logGoogle = false;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery
@@ -65,6 +66,7 @@ class ProfileTab extends StatelessWidget {
                   style: AppTextStyles.bold20White,
                 ),
                 SizedBox(height: height * 0.02),
+
                 Row(
                   children: [
                     Expanded(
@@ -98,7 +100,10 @@ class ProfileTab extends StatelessWidget {
                         backgroundColor: AppColors.red,
                         borderColor: AppColors.transparent,
                         hasSuffixIcon: true,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushNamedAndRemoveUntil
+                            (AppRoutes.loginRouteName, (route) => false,);
+                        },
                       ),
                     ),
                   ],
