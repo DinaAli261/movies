@@ -5,6 +5,7 @@ import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/model/movie_api_manager.dart';
 import 'package:movies/providers/app_language_provider.dart';
 import 'package:movies/utils/app_colors.dart';
+import 'package:movies/utils/app_routes.dart';
 import 'package:movies/utils/app_text_styles.dart';
 
 import '../../../model/movies/movie_response.dart';
@@ -17,6 +18,8 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   final MovieApiManager _movieService = MovieApiManager();
+
+
   List<Movie> movies = [];
   bool isLoading = true;
   String error = '';
@@ -156,11 +159,19 @@ class _HomeTabState extends State<HomeTab> {
                 scrollDirection: Axis.horizontal,
 
                 itemBuilder: (context, index) {
-                  return MovieItem(
-                    index: index,
-                    movie: movies[index],
-                    height: 0.24,
-                    width: 0.3395,);
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        AppRoutes.movieDetailsRouteName,
+                        arguments: movies[index],
+                      );
+                    },
+                    child: MovieItem(
+                      index: index,
+                      movie: movies[index],
+                      height: 0.24,
+                      width: 0.3395,),
+                  );
 
                 },
                 itemCount: movies.length, separatorBuilder: (BuildContext context, int index) { return SizedBox(width: size.width*0.045,); },
