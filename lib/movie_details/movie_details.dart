@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/l10n/app_localizations.dart';
+import 'package:movies/movie_details/cast_card.dart';
 import 'package:movies/movie_details/stats.dart';
 import 'package:movies/movie_details/suggestion_item.dart';
 import 'package:movies/utils/app_colors.dart';
@@ -23,7 +24,7 @@ class MovieDetails extends StatefulWidget {
 }
 
 class _MovieDetailsState extends State<MovieDetails> {
-  MoviesDetailsResponse? movieDetails;
+  MoviesDetails? movieDetails;
   List<MovieSuggestion> similarMovies = [];
   bool isLoading = true;
   String error = '';
@@ -59,7 +60,7 @@ class _MovieDetailsState extends State<MovieDetails> {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: size.width * 0.025),
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.025),
             child: Column(
               spacing: size.height * 0.015,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -120,6 +121,12 @@ class _MovieDetailsState extends State<MovieDetails> {
                           currentMovie?.titleEnglish ?? '',
                           style: AppTextStyles.bold24White,
                         ),
+                      ),Positioned(
+                        bottom: size.height * 0.03,
+                        child: Text(
+                         '${currentMovie?.year}',
+                          style: AppTextStyles.bold24White,
+                        ),
                       ),
                     ],
                   ),
@@ -166,56 +173,19 @@ class _MovieDetailsState extends State<MovieDetails> {
                   AppLocalizations.of(context)!.screen_shots,
                   style: AppTextStyles.bold24White,
                 ),
-                ...List.generate(
-                  2,
-                  (index) => Container(
-                    margin: EdgeInsets.only(bottom: size.height * 0.02),
-                    height: size.height * 0.0,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.network(
-                        currentMovie!.largeCoverImage![index],
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            height: size.height * 0.1,
-                            color: AppColors.grey,
-                            alignment: Alignment.center,
-                            child: Icon(
-                              Icons.photo,
-                              color: AppColors.white,
-                              size: 50,
-                            ),
-                          );
-                        },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            color: AppColors.grey,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.yellow,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
+                ScreenShots(currentMovie?.largeScreenshotImage1 ?? '',size),
+                ScreenShots(currentMovie?.largeScreenshotImage2 ?? '',size),
+                ScreenShots(currentMovie?.largeScreenshotImage3 ?? '',size),
                 //todo:similar
                 Text(
                   AppLocalizations.of(context)!.similar,
                   style: AppTextStyles.bold24White,
                 ),
                 SizedBox(
-                  height: 200,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
+                  height:size.height *  0.4,
+                  child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: size.width* 0.04,crossAxisSpacing: size.height* 0.04),
+                    scrollDirection: Axis.vertical,
 
                     itemBuilder: (context, index) {
                       return InkWell(
@@ -234,12 +204,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                       );
                     },
                     itemCount: similarMovies.length,
-                    separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(width: size.width * 0.045);
-                    },
+
                   ),
                 ),
-
                 //todo: summary
                 Text(
                   AppLocalizations.of(context)!.summary,
@@ -254,15 +221,19 @@ class _MovieDetailsState extends State<MovieDetails> {
                   AppLocalizations.of(context)!.cast,
                   style: AppTextStyles.bold24White,
                 ),
-                // List.generate(currentMovie?., generator)
-
+                ...List.generate(
+                  currentMovie?.cast?.length ?? 0,
+                      (index) => CastCard(
+                    imgUrl: currentMovie?.cast?[index].urlSmallImage ?? '',
+                    role: currentMovie?.cast?[index].characterName ?? '',
+                    name: currentMovie?.cast?[index].name ?? '',
+                  ),
+                ),
                 //todo:genres
                 Text(
                   AppLocalizations.of(context)!.genres,
                   style: AppTextStyles.bold24White,
                 ),
-
-                //todo:Genres
                 Genres(currentMovie?.genres, size),
               ],
             ),
@@ -298,12 +269,32 @@ class _MovieDetailsState extends State<MovieDetails> {
     );
   }
 
-  // Widget CastList(List<String>? cast, Size size) {
-  //    if (cast == null || cast.isEmpty) {
-  //     return SizedBox(); // Return empty if no genres
-  //   }
-  //
-  // }
+  Widget ScreenShots(String imgUrl, Size size) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Image.network(
+        imgUrl,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            height: size.height * 0.1,
+            color: AppColors.grey,
+            alignment: Alignment.center,
+            child: Icon(Icons.photo, color: AppColors.white, size: 50),
+          );
+        },
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
+            color: AppColors.grey,
+            child: Center(
+              child: CircularProgressIndicator(color: AppColors.yellow),
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   Future<void> _loadMovieData() async {
     try {
@@ -311,23 +302,14 @@ class _MovieDetailsState extends State<MovieDetails> {
         isLoading = true;
         error = '';
       });
-
-      print("Loading movie details for ID: ${widget.movieId}");
-
-      // 1. GET DETAILS OF CLICKED MOVIE
+      // GET DETAILS OF CLICKED MOVIE
       final detailsResponse = await MovieDetailsApiManager.getMovieDetails(
         moviesId: widget.movieId,
       );
 
-      print("Details response received: ${detailsResponse != null}");
-
-      // 2. GET SIMILAR MOVIES TO CLICKED MOVIE
+      //  GET SIMILAR MOVIES TO CLICKED MOVIE
       final suggestionsResponse = await MoviesApi.getMovieSuggestions(
         movieId: widget.movieId,
-      );
-
-      print(
-        "Suggestions response received: ${suggestionsResponse.movies?.length ?? 0} movies",
       );
 
       setState(() {
