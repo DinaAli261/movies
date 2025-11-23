@@ -23,15 +23,17 @@ class MovieSuggestion {
   int? id;
   String? title;
   String? mediumCoverImage;
+  double? rating;
 
-  MovieSuggestion({this.id, this.title, this.mediumCoverImage});
+  MovieSuggestion({this.id, this.title, this.mediumCoverImage, this.rating});
 
   factory MovieSuggestion.fromJson(Map<String, dynamic> json) {
     return MovieSuggestion(
       id: json['id'],
       title: json['title'],
       mediumCoverImage: json['medium_cover_image'],
+        rating: (json['rating'] as num?)?.toDouble() ?? 0.0
     );
   }
 }
-}
+

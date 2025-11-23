@@ -113,21 +113,32 @@ class _HomeTabState extends State<HomeTab> {
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(20),
-                                        child: Image.network(
-                                          movie.mediumCoverImage,
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                                return Container(
-                                                  alignment: Alignment.center,
-                                                  color: Colors.grey,
-                                                  child: Icon(
-                                                    Icons.movie,
-                                                    size: 50,
-                                                  ),
-                                                );
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                              context,
+                                              AppRoutes.movieDetailsRouteName,
+                                              arguments: {
+                                                'movieId': movies[index].id,
                                               },
+                                            );
+                                          },
+                                          child: Image.network(
+                                            movie.mediumCoverImage,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Container(
+                                                alignment: Alignment.center,
+                                                color: Colors.grey,
+                                                child: Icon(
+                                                  Icons.movie,
+                                                  size: 50,
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -142,9 +153,14 @@ class _HomeTabState extends State<HomeTab> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        AppLocalizations.of(context)!.action,
-                        style: AppTextStyles.regular20White,
+                      TextButton(
+                        onPressed: () {
+                          //todo:move to browse tab
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.action,
+                          style: AppTextStyles.regular20White,
+                        ),
                       ),
                       Row(
                         spacing: 5,

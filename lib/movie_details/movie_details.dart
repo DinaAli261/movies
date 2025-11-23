@@ -100,10 +100,15 @@ class _MovieDetailsState extends State<MovieDetails> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ImageIcon(
-                                AssetImage(AppImages.movieDetailsArrowBack),
-                                color: AppColors.white,
-                                size: 16,
+                              InkWell(
+                                child: ImageIcon(
+                                  AssetImage(AppImages.movieDetailsArrowBack),
+                                  color: AppColors.white,
+                                  size: 16,
+                                ),
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                },
                               ),
                               ImageIcon(
                                 AssetImage(AppImages.movieDetailsIconSave),
@@ -182,10 +187,15 @@ class _MovieDetailsState extends State<MovieDetails> {
                   style: AppTextStyles.bold24White,
                 ),
                 SizedBox(
-                  height:size.height *  0.4,
+                  height: size.height * 0.65,
                   child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: size.width* 0.04,crossAxisSpacing: size.height* 0.04),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, mainAxisSpacing: size.height * 0.017,
+                        crossAxisSpacing: size.width * 0.04,
+                        childAspectRatio: 189 / 279
+                    ),
                     scrollDirection: Axis.vertical,
+
 
                     itemBuilder: (context, index) {
                       return InkWell(
@@ -198,8 +208,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                         },
                         child: SuggestionItem(
                           movie: similarMovies[index],
-                          height: 0.24,
-                          width: 0.3395,
+                          height: 0.2993,
+                          width: 0.4395,
+                          rating: similarMovies[index].rating as double,
                         ),
                       );
                     },
@@ -235,6 +246,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                   style: AppTextStyles.bold24White,
                 ),
                 Genres(currentMovie?.genres, size),
+                SizedBox(
+                  height: size.height * 0.06,
+                )
               ],
             ),
           ),

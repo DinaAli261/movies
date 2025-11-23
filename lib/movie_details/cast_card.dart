@@ -28,6 +28,7 @@ class CastCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
+        spacing: size.width * 0.015,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.network(
@@ -52,6 +53,7 @@ class CastCard extends StatelessWidget {
             },
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(width: size.width * 0.01),
               Text(
@@ -60,7 +62,7 @@ class CastCard extends StatelessWidget {
                 textAlign: TextAlign.start,
               ),
               Text(
-                '     ${AppLocalizations.of(context)!.character}: $name',
+                '${AppLocalizations.of(context)!.character}: $name',
                 style: AppTextStyles.regular20White,
               ),
             ],

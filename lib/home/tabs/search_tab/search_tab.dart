@@ -6,7 +6,6 @@ import 'package:movies/widgets/custom_text_form_filed.dart';
 
 import '../../../model/MovieApiManager.dart';
 import '../../../model/movies/movie_response.dart';
-import '../../../movie_details/movie_details_api_manager.dart';
 import '../home_tab/widget/movie_item.dart';
 
 class SearchTab extends StatefulWidget {
@@ -78,6 +77,7 @@ class _SearchTabState extends State<SearchTab> {
                     crossAxisSpacing: 0.037 * width,
                     childAspectRatio: 191 / 297
                 ),
+                itemCount: movies.length,
                 itemBuilder: (context, index) {
                   //todo : reusable widget movie from api
                   return MovieItem(index: index,

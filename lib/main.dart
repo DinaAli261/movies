@@ -79,7 +79,11 @@ class MyApp extends StatelessWidget {
             avatarIndex: args['avatarIndex'],
           );
         },
-        AppRoutes.movieDetailsRouteName: (context) => MovieDetails(),
+        AppRoutes.movieDetailsRouteName: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map;
+
+          return MovieDetails(movieId: args['movieId'] as int);
+        },
       },
       themeMode: ThemeMode.dark,
       theme: AppTheme.darkTheme,
