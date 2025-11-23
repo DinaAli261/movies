@@ -318,7 +318,6 @@ class _MovieDetailsState extends State<MovieDetails> {
         isLoading = false;
       });
     } catch (e) {
-      print("Error in _loadMovieData: $e");
       setState(() {
         error = 'Failed to load movie data: $e';
         isLoading = false;

@@ -4,8 +4,9 @@ import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/widgets/custom_text_form_filed.dart';
 
-import '../../../model/movie_api_manager.dart';
+import '../../../model/MovieApiManager.dart';
 import '../../../model/movies/movie_response.dart';
+import '../../../movie_details/movie_details_api_manager.dart';
 import '../home_tab/widget/movie_item.dart';
 
 class SearchTab extends StatefulWidget {

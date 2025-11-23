@@ -9,6 +9,7 @@ import 'package:movies/model/RegisterResponse.dart';
 import '../model/DeleteProfileResponse.dart';
 import '../model/ResetPasswordResponse.dart';
 import '../model/UpdateProfileResponse.dart';
+import '../model/movies/movies_details_response.dart';
 
 class ApiManager {
   static Future<LoginResponse> login({
@@ -120,7 +121,6 @@ class ApiManager {
         'Authorization': 'Bearer $token',
       },
     );
-
     var json = jsonDecode(response.body);
     return DeleteProfileResponse.fromJson(json);
   }
