@@ -181,4 +181,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fantasy => 'Fantasy';
+
+  @override
+  String get character => 'Character';
+
+  @override
+  String get watch => 'Watch';
+
+  @override
+  String get cast => 'Cast';
+
+  @override
+  String get summary => 'Summary';
+
+  @override
+  String get similar => 'Similar';
+
+  @override
+  String get genres => 'Genres';
+
+  @override
+  String get screen_shots => 'Screen Shots';
+
+  @override
+  String get something_went_wrong => 'Something Went Wrong';
+
+  @override
+  String get try_again => 'Try Again';
 }
