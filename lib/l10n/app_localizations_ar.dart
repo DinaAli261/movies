@@ -181,4 +181,31 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fantasy => 'خيال';
+
+  @override
+  String get character => 'شخصية';
+
+  @override
+  String get watch => 'شاهد';
+
+  @override
+  String get cast => 'طاقم العمل';
+
+  @override
+  String get summary => 'الملخص';
+
+  @override
+  String get similar => 'مشابه';
+
+  @override
+  String get genres => 'الأنواع';
+
+  @override
+  String get screen_shots => 'لقطات الشاشة';
+
+  @override
+  String get something_went_wrong => 'حدث خطأ ما';
+
+  @override
+  String get try_again => 'جرب مجددا';
 }

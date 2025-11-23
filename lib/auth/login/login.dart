@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
   );
 
   TextEditingController passwordController = TextEditingController(
-    text: 'Youssef123@',
+    text: 'Malak123@',
   );
   bool isObscure = true;
 
@@ -283,7 +283,7 @@ class _LoginState extends State<Login> {
           await UserManager.saveToken(response.data);
           print("TOKEN SAVED: ${response.data}");
         }
-
+        DialogUtils.hideLoading(context);
         DialogUtils.showMessage(
           context: context,
           title: isSuccess ? "Success" : "Error",

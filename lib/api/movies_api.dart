@@ -7,9 +7,9 @@ import 'api_constants.dart';
 import 'end_points.dart';
 
 class MoviesApi {
-  static Future<MovieSuggestionResponse> getMovieSuggestions(
-    int movieId,
-  ) async {
+  static Future<MovieSuggestionResponse> getMovieSuggestions({
+   required int movieId,
+  }) async {
     Uri url = Uri.https(
       ApiConstants.moviesBaseUrl,
       '${ApiConstants.moviesBasePath}${EndPoints.movieSuggestions}',
@@ -25,4 +25,5 @@ class MoviesApi {
       throw Exception('Failed to load movie suggestions');
     }
   }
+}
 }

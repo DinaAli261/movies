@@ -5,18 +5,27 @@ import 'package:movies/api/api_constants.dart';
 import 'package:movies/api/end_points.dart';
 import 'package:movies/model/movies/movies_details_response.dart';
 
-class MovieApiManager {
-  static Future<MoviesDetailsResponse> getMovieDetails(int moviesId) async {
-    Uri url = Uri.https(ApiConstants.baseUrlDetails, EndPoints.detailsApi, {
-      'movie_id': moviesId,
-    });
+class MovieDetailsApiManager {
+  static Future<MoviesDetails> getMovieDetails({required int moviesId}) async {
+    Uri url = Uri.https(
+      ApiConstants.moviesBaseUrl,
+      EndPoints.detailsApi,
+      {
+        'movie_id': moviesId.toString(),
+        'with_image':'true',
+        'with_cast': 'true'
+      },
+    );
+
     try {
-      var Response = await http.get(url);
-      var bodyResponse = Response.body;
-      var json = jsonDecode(bodyResponse);
-      return MoviesDetailsResponse.fromJson(json);
+      final response = await http.get(url);
+      final json = jsonDecode(response.body);
+      return MoviesDetails.fromJson(json);
+
     } catch (e) {
+      print("ERROR: $e");
       rethrow;
     }
   }
+
 }

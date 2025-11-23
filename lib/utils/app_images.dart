@@ -26,6 +26,7 @@ class AppImages {
   static const String loginLogo = "assets/images/loginLogo.png";
   static const String exitIcon = "assets/images/exitIcon.png";
   static const String historyIcon = "assets/images/historyIcon.png";
+  static const String playIcon = "assets/images/play_icon.png";
   static const String movieDetailsIconClock =
       "assets/images/movieDetailsIconClock.png";
   static const String movieDetailsIconHeart =

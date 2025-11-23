@@ -3,7 +3,7 @@ import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_text_styles.dart';
 
-import '../../../model/movie_api_manager.dart';
+import '../../../model/MovieApiManager.dart';
 import '../../../model/movies/movie_response.dart';
 import '../home_tab/widget/movie_item.dart';
 
