@@ -54,5 +54,14 @@
   "animation": "رسوم متحركة",
   "comedy": "كوميديا",
   "family": "عائلي",
-  "fantasy": "خيال"
+  "fantasy": "خيال",
+  "character": "شخصية",
+  "watch": "شاهد",
+  "cast": "طاقم العمل",
+  "summary": "الملخص",
+  "similar": "مشابه",
+  "genres": "الأنواع",
+  "screen_shots": "لقطات الشاشة",
+  "something_went_wrong":"حدث خطأ ما",
+  "try_again":"جرب مجددا"
 }
