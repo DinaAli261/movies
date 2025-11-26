@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movies/l10n/app_localizations.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_text_styles.dart';
-
 import '../../../model/MovieApiManager.dart';
 import '../../../model/movies/movie_response.dart';
 import '../home_tab/widget/movie_item.dart';
@@ -19,7 +17,6 @@ class _BrowseTabState extends State<BrowseTab> {
   List<Movie> movies = [];
   bool isLoading = true;
   String error = '';
-  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -29,21 +26,15 @@ class _BrowseTabState extends State<BrowseTab> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> tabsName = [
-      AppLocalizations.of(context)!.adventure,
-      AppLocalizations.of(context)!.animation,
-      AppLocalizations.of(context)!.comedy,
-      AppLocalizations.of(context)!.family,
-      AppLocalizations.of(context)!.fantasy
-    ];
-    final width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    Set<String> genresSet = {};
+    for (var movie in movies) {
+      genresSet.addAll(movie.genres);
+    }
+    List<String> genres = genresSet.toList();
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(
@@ -51,14 +42,18 @@ class _BrowseTabState extends State<BrowseTab> {
           left: 0.037 * width,
           right: 0.037 * width,
         ),
-        child: DefaultTabController(
-          length: tabsName.length,
-          child: Column(
+        child: isLoading
+            ? Center(child: CircularProgressIndicator(color: AppColors.yellow))
+            : error.isNotEmpty
+            ? Center(child: Text(error))
+            : DefaultTabController(
+                length: genres.length,
+                child: Column(
             children: [
               TabBar(
                 tabAlignment: TabAlignment.start,
-                labelPadding: EdgeInsets.only(right: width * 0.019),
-                isScrollable: true,
+                      labelPadding: EdgeInsets.only(right: width * 0.019),
+                      isScrollable: true,
                 dividerColor: AppColors.transparent,
                 labelStyle: AppTextStyles.bold20Black,
                 unselectedLabelStyle: AppTextStyles.bold20Yellow,
@@ -66,11 +61,13 @@ class _BrowseTabState extends State<BrowseTab> {
                   color: AppColors.yellow,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                tabs: tabsName.map((text) {
-                  return Container(
+                      tabs: genres.map((text) {
+                        return Container(
                     padding: EdgeInsets.symmetric(
-                        vertical: height * 0.013, horizontal: 0.032 * width),
-                    decoration: BoxDecoration(
+                            vertical: height * 0.013,
+                            horizontal: 0.032 * width,
+                          ),
+                          decoration: BoxDecoration(
                       border: Border.all(color: AppColors.yellow),
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -81,16 +78,23 @@ class _BrowseTabState extends State<BrowseTab> {
 
               Expanded(
                 child: TabBarView(
-                  children: List.generate(
-                    tabsName.length,
-                        (index) {
-                      return (movies.isEmpty)
-                          ? Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.yellow,
-                          ))
+                  children: List.generate(genres.length, (index) {
+                          String currentGenre = genres[index];
+                          List<Movie> filteredMovies = movies
+                              .where(
+                                (movie) => movie.genres.contains(currentGenre),
+                              )
+                              .toList();
+
+                          return (filteredMovies.isEmpty? Center(
+                            child: Text(
+                              "No movies found",
+                              style: AppTextStyles.bold20Yellow,
+                            ),
+                          )
                           : GridView.builder(
-                        padding: EdgeInsets.only(top: height * 0.027),
+                            padding: EdgeInsets.only(
+                                top: height * 0.027),
                         gridDelegate:
                         SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -98,11 +102,12 @@ class _BrowseTabState extends State<BrowseTab> {
                           crossAxisSpacing: 0.037 * width,
                           childAspectRatio: 191 / 297,
                         ),
-                        itemCount: movies.length,
-                        itemBuilder: (context, movieIndex) {
+                            itemCount: filteredMovies.length,
+                            itemBuilder:
+                                (context, movieIndex) {
                           return MovieItem(
                             index: movieIndex,
-                            movie: movies[movieIndex],
+                            movie: filteredMovies[movieIndex],
                             height: 0.299,
                             width: 0.444,
                           );
