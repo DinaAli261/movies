@@ -19,14 +19,8 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     var userProvider = Provider.of<UserProvider>(context);
 
     int avatarIndex = (userProvider.currentUser?.avaterId ?? 1) - 1;
@@ -36,183 +30,180 @@ class ProfileTab extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            padding: EdgeInsets.only(
-              bottom: 0,
-              top: height * 0.07,
-              // right: width * 0.04,
-              //left: width * 0.04,
-            ),
-            color: AppColors.grey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Image.asset(
-                      Account.avatars[avatarIndex],
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
-                    CustomDetails(text: 'Watch List', num: '12'),
-                    Consumer<HistoryProvider>(
-                      builder: (context, historyProvider, _) {
-                        return CustomDetails(
-                          text: 'History',
-                          num: '${historyProvider.history.length}',
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: height * 0.02),
-                Text(
-                  userProvider.currentUser?.name ?? '',
-                  style: AppTextStyles.bold20White,
-                ),
-                SizedBox(height: height * 0.02),
-                Padding(
-                  padding: EdgeInsets.only(
-                    right: width * 0.04,
-                    left: width * 0.04,
-                  ),
-                  child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: EdgeInsets.only(
+                bottom: 0,
+                top: height * 0.07,
+                // right: width * 0.04,
+                //left: width * 0.04,
+              ),
+              color: AppColors.grey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Expanded(
-                        flex: 2,
-                        child: CustomElevatedButton(
-                          text: 'Edit Profile',
-                          backgroundColor: AppColors.yellow,
-                          onPressed: () {
-                            var user = userProvider.currentUser;
-                            if (user == null) return;
-                            Navigator.of(context).pushNamed(
-                              AppRoutes.updateProfileRouteName,
-                              arguments: {
-                                'name': user.name,
-                                'phone': user.phone,
-                                'avatarIndex': user.avaterId - 1,
-                              },
-                            );
-                          },
-                        ),
+                      Image.asset(
+                        Account.avatars[avatarIndex],
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
                       ),
-                      SizedBox(width: width * 0.04),
-                      Expanded(
-                        child: CustomElevatedButton(
-                          text: 'Exit',
-                          textStyle: AppTextStyles.regular20White,
-                          suffixIcon: Image.asset(
-                            AppImages.exitIcon,
-                            color: AppColors.white,
-                          ),
-                          backgroundColor: AppColors.red,
-                          borderColor: AppColors.transparent,
-                          hasSuffixIcon: true,
-                          onPressed: () {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                              AppRoutes.loginRouteName,
-                                  (route) => false,
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: height * 0.04),
-                // ================= TabBar + TabBarView =================
-                DefaultTabController(
-                  length: 2,
-                  child: Column(
-                    children: [
-                      TabBar(
-                        indicatorColor: AppColors.yellow,
-                        dividerColor: AppColors.transparent,
-                        tabs: [
-                          CustomTap(
-                            image: AppImages.watchListIcon,
-                            text: 'Watch List',
-                          ),
-                          CustomTap(
-                            image: AppImages.historyIcon,
+                      CustomDetails(text: 'Watch List', num: '12'),
+                      Consumer<HistoryProvider>(
+                        builder: (context, historyProvider, _) {
+                          return CustomDetails(
                             text: 'History',
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: height * 0.65,
-                        width: double.infinity,
-                        child: Container(
-                          color: AppColors.black,
-                          child: TabBarView(
-                            children: [
-                              // Watchlist Placeholder
-                              Center(
-                                child: Image.asset(AppImages.emptyIcon),
-                              ),
-
-                              // History Grid
-                              Consumer<HistoryProvider>(
-                                builder: (context, historyProvider, _) {
-                                  if (historyProvider.history.isEmpty) {
-                                    return Center(
-                                      child: Image.asset(AppImages.emptyIcon),
-                                    );
-                                  }
-
-                                  return GridView.builder(
-                                    padding: EdgeInsets.all(width * 0.02),
-                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      mainAxisSpacing: height * 0.017,
-                                      crossAxisSpacing: width * 0.04,
-                                      childAspectRatio: 189 / 279,
-                                    ),
-                                    itemCount: historyProvider.history.length,
-                                    itemBuilder: (context, index) {
-                                      final hMovie = historyProvider
-                                          .history[index];
-
-                                      final historyAsMovie = Movie(
-                                        id: hMovie.id,
-                                        title: hMovie.title,
-                                        titleEnglish: hMovie.title,
-                                        year: 0,
-                                        rating: 0,
-                                        mediumCoverImage: hMovie.posterPath,
-                                        largeCoverImage: hMovie.posterPath,
-                                        genres: [],
-                                        runtime: 0,
-                                      );
-                                      return MovieItem(
-                                        index: index,
-                                        movie: historyAsMovie,
-                                        height: 0.24,
-                                        width: 0.3395,
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
+                            num: '${historyProvider.history.length}',
+                          );
+                        },
                       ),
                     ],
                   ),
-                ),
-              ],
+                  SizedBox(height: height * 0.02),
+                  Text(
+                    userProvider.currentUser?.name ?? '',
+                    style: AppTextStyles.bold20White,
+                  ),
+                  SizedBox(height: height * 0.02),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: width * 0.04,
+                      left: width * 0.04,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: CustomElevatedButton(
+                            text: 'Edit Profile',
+                            backgroundColor: AppColors.yellow,
+                            onPressed: () {
+                              var user = userProvider.currentUser;
+                              if (user == null) return;
+                              Navigator.of(context).pushNamed(
+                                AppRoutes.updateProfileRouteName,
+                                arguments: {
+                                  'name': user.name,
+                                  'phone': user.phone,
+                                  'avatarIndex': user.avaterId - 1,
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(width: width * 0.04),
+                        Expanded(
+                          child: CustomElevatedButton(
+                            text: 'Exit',
+                            textStyle: AppTextStyles.regular20White,
+                            suffixIcon: Image.asset(
+                              AppImages.exitIcon,
+                              color: AppColors.white,
+                            ),
+                            backgroundColor: AppColors.red,
+                            borderColor: AppColors.transparent,
+                            hasSuffixIcon: true,
+                            onPressed: () {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                AppRoutes.loginRouteName,
+                                (route) => false,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: height * 0.04),
+                  DefaultTabController(
+                    length: 2,
+                    child: Column(
+                      children: [
+                        TabBar(
+                          indicatorColor: AppColors.yellow,
+                          dividerColor: AppColors.transparent,
+                          tabs: [
+                            CustomTap(
+                              image: AppImages.watchListIcon,
+                              text: 'Watch List',
+                            ),
+                            CustomTap(
+                              image: AppImages.historyIcon,
+                              text: 'History',
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: height * 0.65,
+                          width: double.infinity,
+                          child: Container(
+                            color: AppColors.black,
+                            child: TabBarView(
+                              children: [
+                                // Watchlist Placeholder
+                                Center(child: Image.asset(AppImages.emptyIcon)),
+
+                                Consumer<HistoryProvider>(
+                                  builder: (context, historyProvider, _) {
+                                    if (historyProvider.history.isEmpty) {
+                                      return Center(
+                                        child: Image.asset(AppImages.emptyIcon),
+                                      );
+                                    }
+
+                                    return GridView.builder(
+                                      padding: EdgeInsets.all(width * 0.02),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3,
+                                            mainAxisSpacing: height * 0.017,
+                                            crossAxisSpacing: width * 0.04,
+                                            childAspectRatio: 189 / 279,
+                                          ),
+                                      itemCount: historyProvider.history.length,
+                                      itemBuilder: (context, index) {
+                                        final hMovie =
+                                            historyProvider.history[index];
+
+                                        final historyAsMovie = Movie(
+                                          id: hMovie.id,
+                                          title: hMovie.title,
+                                          titleEnglish: hMovie.title,
+                                          year: 0,
+                                          rating: 0,
+                                          mediumCoverImage: hMovie.posterPath,
+                                          largeCoverImage: hMovie.posterPath,
+                                          genres: [],
+                                          runtime: 0,
+                                        );
+                                        return MovieItem(
+                                          index: index,
+                                          movie: historyAsMovie,
+                                          height: 0.24,
+                                          width: 0.3395,
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: height * 0.03),
-          Image.asset(AppImages.emptyIcon),
-        ],
-      ),
+            SizedBox(height: height * 0.03),
+            Image.asset(AppImages.emptyIcon),
+          ],
+        ),
       ),
     );
   }

@@ -30,9 +30,6 @@ class _LoginState extends State<Login> {
   final formKey = GlobalKey<FormState>();
   late UserProvider userProvider;
 
-
-
-
   TextEditingController emailController = TextEditingController(
     text: 'malak.ahmed91@gmail.com',
   );
@@ -116,13 +113,13 @@ class _LoginState extends State<Login> {
                           },
                           child: (isObscure)
                               ? ImageIcon(
-                            AssetImage(AppImages.passwordIcon2),
-                            color: AppColors.white,
-                          )
+                                  AssetImage(AppImages.passwordIcon2),
+                                  color: AppColors.white,
+                                )
                               : Icon(
-                            Icons.remove_red_eye,
-                            color: AppColors.white,
-                          ),
+                                  Icons.remove_red_eye,
+                                  color: AppColors.white,
+                                ),
                         ),
                       ),
                       Align(
@@ -220,12 +217,11 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> signInWithGoogle() async {
-
     try {
       final GoogleSignIn signIn = GoogleSignIn.instance;
       signIn.initialize(
         serverClientId:
-        "121281015-l0kbclehoone64jcmliknlkbtlj1pjq8.apps.googleusercontent.com",
+            "121281015-l0kbclehoone64jcmliknlkbtlj1pjq8.apps.googleusercontent.com",
       );
 
       final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
@@ -243,11 +239,13 @@ class _LoginState extends State<Login> {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithCredential(credential);
       var firebaseUser = userCredential.user;
-      MyUser myUser = MyUser(id: firebaseUser?.uid ?? '',
-          email: firebaseUser?.email ?? '',
-          name: firebaseUser?.displayName ?? '',
-          phone: firebaseUser?.phoneNumber ?? '',
-          avaterId: null ?? 0);
+      MyUser myUser = MyUser(
+        id: firebaseUser?.uid ?? '',
+        email: firebaseUser?.email ?? '',
+        name: firebaseUser?.displayName ?? '',
+        phone: firebaseUser?.phoneNumber ?? '',
+        avaterId: null ?? 0,
+      );
       userProvider.updateUser(myUser);
       DialogUtils.showMessage(
         context: context,
@@ -278,7 +276,7 @@ class _LoginState extends State<Login> {
 
         bool isSuccess =
             response.statusCode == 200 &&
-                response.message.toString().toLowerCase().contains("login");
+            response.message.toString().toLowerCase().contains("login");
 
         if (isSuccess) {
           await UserManager.saveToken(response.data);
@@ -292,12 +290,16 @@ class _LoginState extends State<Login> {
           posName: "OK",
           posAction: isSuccess
               ? () async {
-            var userProvider = Provider.of<UserProvider>(
-                context, listen: false);
-            var historyProvider = Provider.of<HistoryProvider>(
-                context, listen: false);
+                  var userProvider = Provider.of<UserProvider>(
+                    context,
+                    listen: false,
+                  );
+                  var historyProvider = Provider.of<HistoryProvider>(
+                    context,
+                    listen: false,
+                  );
 
-            // 1) حفظ بيانات المستخدم
+                  // 1) حفظ بيانات المستخدم
             userProvider.updateUser(
               MyUser(
                 id: response.data ?? "",
@@ -308,17 +310,14 @@ class _LoginState extends State<Login> {
               ),
             );
 
-            // 2) تحميل الهيستوري المرتبط باليوزر
-            final userId = userProvider.currentUser!.id;
+                  final userId = userProvider.currentUser!.id;
 
-            await historyProvider.loadHistory(userId);
-
-            // 3) الدخول للهوم
-            Navigator.of(context).pushReplacementNamed(
-                AppRoutes.homeScreenRouteName);
+                  await historyProvider.loadHistory(userId);
+            Navigator.of(
+              context,
+            ).pushReplacementNamed(AppRoutes.homeScreenRouteName);
           }
               : null,
-
         );
       } catch (e) {
         Navigator.of(context).pop();
