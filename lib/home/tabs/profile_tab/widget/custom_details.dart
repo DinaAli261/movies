@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../../utils/app_text_styles.dart';
 
 class CustomDetails extends StatelessWidget {
-  CustomDetails({super.key, required this.text, required this.num});
-
+  CustomDetails({super.key, required this.text, required this.num, this.onTap});
   String num;
   String text;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

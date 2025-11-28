@@ -7,10 +7,13 @@ import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/utils/app_text_styles.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
+import 'package:provider/provider.dart';
 
 import '../api/movies_api.dart';
+import '../model/movies/HistoryMovies.dart';
 import '../model/movies/MovieSuggestionResponse.dart';
 import '../model/movies/movies_details_response.dart';
+import '../providers/history_provider.dart';
 import '../utils/app_routes.dart';
 import 'movie_details_api_manager.dart';
 
@@ -126,10 +129,11 @@ class _MovieDetailsState extends State<MovieDetails> {
                           currentMovie?.titleEnglish ?? '',
                           style: AppTextStyles.bold24White,
                         ),
-                      ),Positioned(
+                      ),
+                      Positioned(
                         bottom: size.height * 0.03,
                         child: Text(
-                         '${currentMovie?.year}',
+                          '${currentMovie?.year}',
                           style: AppTextStyles.bold24White,
                         ),
                       ),
@@ -142,8 +146,29 @@ class _MovieDetailsState extends State<MovieDetails> {
                   textStyle: AppTextStyles.bold20White,
                   backgroundColor: AppColors.red,
                   borderColor: AppColors.red,
-                  onPressed: () {},
+                  onPressed: () {
+                    final historyProvider = Provider.of<HistoryProvider>(
+                      context,
+                      listen: false,
+                    );
+                    historyProvider.addToHistory(
+                      HistoryMovie(
+                        id: currentMovie?.id ?? 0,
+                        title:
+                            currentMovie?.titleEnglish ??
+                            currentMovie?.title ??
+                            "Unknown Title",
+                        posterPath: currentMovie?.largeCoverImage ?? "",
+                        date: DateTime.now().toIso8601String(),
+                        rating: currentMovie?.rating ?? 0.0,
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Added to history!")),
+                    );
+                  },
                 ),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -178,9 +203,9 @@ class _MovieDetailsState extends State<MovieDetails> {
                   AppLocalizations.of(context)!.screen_shots,
                   style: AppTextStyles.bold24White,
                 ),
-                ScreenShots(currentMovie?.largeScreenshotImage1 ?? '',size),
-                ScreenShots(currentMovie?.largeScreenshotImage2 ?? '',size),
-                ScreenShots(currentMovie?.largeScreenshotImage3 ?? '',size),
+                ScreenShots(currentMovie?.largeScreenshotImage1 ?? '', size),
+                ScreenShots(currentMovie?.largeScreenshotImage2 ?? '', size),
+                ScreenShots(currentMovie?.largeScreenshotImage3 ?? '', size),
                 //todo:similar
                 Text(
                   AppLocalizations.of(context)!.similar,
@@ -190,12 +215,12 @@ class _MovieDetailsState extends State<MovieDetails> {
                   height: size.height * 0.65,
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, mainAxisSpacing: size.height * 0.017,
-                        crossAxisSpacing: size.width * 0.04,
-                        childAspectRatio: 189 / 279
+                      crossAxisCount: 2,
+                      mainAxisSpacing: size.height * 0.017,
+                      crossAxisSpacing: size.width * 0.04,
+                      childAspectRatio: 189 / 279,
                     ),
                     scrollDirection: Axis.vertical,
-
 
                     itemBuilder: (context, index) {
                       return InkWell(
@@ -215,7 +240,6 @@ class _MovieDetailsState extends State<MovieDetails> {
                       );
                     },
                     itemCount: similarMovies.length,
-
                   ),
                 ),
                 //todo: summary
@@ -234,7 +258,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                 ),
                 ...List.generate(
                   currentMovie?.cast?.length ?? 0,
-                      (index) => CastCard(
+                  (index) => CastCard(
                     imgUrl: currentMovie?.cast?[index].urlSmallImage ?? '',
                     role: currentMovie?.cast?[index].characterName ?? '',
                     name: currentMovie?.cast?[index].name ?? '',
@@ -246,9 +270,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                   style: AppTextStyles.bold24White,
                 ),
                 Genres(currentMovie?.genres, size),
-                SizedBox(
-                  height: size.height * 0.06,
-                )
+                SizedBox(height: size.height * 0.06),
               ],
             ),
           ),

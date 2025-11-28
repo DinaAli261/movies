@@ -9,6 +9,7 @@ import 'package:movies/widgets/choose_language.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/token_manager.dart';
+import '../../providers/history_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_routes.dart';
@@ -28,9 +29,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final formKey = GlobalKey<FormState>();
   late UserProvider userProvider;
-
-
-
 
   TextEditingController emailController = TextEditingController(
     text: 'malak.ahmed91@gmail.com',
@@ -219,7 +217,6 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> signInWithGoogle() async {
-
     try {
       final GoogleSignIn signIn = GoogleSignIn.instance;
       signIn.initialize(
@@ -242,11 +239,13 @@ class _LoginState extends State<Login> {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithCredential(credential);
       var firebaseUser = userCredential.user;
-      MyUser myUser = MyUser(id: firebaseUser?.uid ?? '',
-          email: firebaseUser?.email ?? '',
-          name: firebaseUser?.displayName ?? '',
-          phone: firebaseUser?.phoneNumber ?? '',
-          avaterId: null ?? 0);
+      MyUser myUser = MyUser(
+        id: firebaseUser?.uid ?? '',
+        email: firebaseUser?.email ?? '',
+        name: firebaseUser?.displayName ?? '',
+        phone: firebaseUser?.phoneNumber ?? '',
+        avaterId: null ?? 0,
+      );
       userProvider.updateUser(myUser);
       DialogUtils.showMessage(
         context: context,
@@ -290,11 +289,34 @@ class _LoginState extends State<Login> {
           message: response.message ?? response.error ?? "Something went wrong",
           posName: "OK",
           posAction: isSuccess
-              ? () {
-                  Navigator.of(
+              ? () async {
+                  var userProvider = Provider.of<UserProvider>(
                     context,
-                  ).pushReplacementNamed(AppRoutes.homeScreenRouteName);
-                }
+                    listen: false,
+                  );
+                  var historyProvider = Provider.of<HistoryProvider>(
+                    context,
+                    listen: false,
+                  );
+
+                  // 1) حفظ بيانات المستخدم
+            userProvider.updateUser(
+              MyUser(
+                id: response.data ?? "",
+                email: emailController.text.trim(),
+                name: "",
+                phone: "",
+                avaterId: 1,
+              ),
+            );
+
+                  final userId = userProvider.currentUser!.id;
+
+                  await historyProvider.loadHistory(userId);
+            Navigator.of(
+              context,
+            ).pushReplacementNamed(AppRoutes.homeScreenRouteName);
+          }
               : null,
         );
       } catch (e) {
