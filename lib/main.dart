@@ -9,6 +9,7 @@ import 'package:movies/home/home_screen.dart';
 import 'package:movies/movie_details/movie_details.dart';
 import 'package:movies/on_boarding/on_boarding.dart';
 import 'package:movies/providers/app_language_provider.dart';
+import 'package:movies/providers/history_provider.dart';
 import 'package:movies/providers/user_provider.dart';
 import 'package:movies/update_profile/update_profile.dart';
 import 'package:movies/utils/app_routes.dart';
@@ -41,6 +42,9 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AppLanguageProvider()),
+        ChangeNotifierProvider(
+          create: (_) => HistoryProvider(),
+        ),
         ChangeNotifierProvider(
           create: (_) => UserProvider()..updateUser(currentUser!),
         ),

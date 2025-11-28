@@ -7,10 +7,13 @@ import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/utils/app_text_styles.dart';
 import 'package:movies/widgets/custom_elevated_button.dart';
+import 'package:provider/provider.dart';
 
 import '../api/movies_api.dart';
+import '../model/movies/HistoryMovies.dart';
 import '../model/movies/MovieSuggestionResponse.dart';
 import '../model/movies/movies_details_response.dart';
+import '../providers/history_provider.dart';
 import '../utils/app_routes.dart';
 import 'movie_details_api_manager.dart';
 
@@ -129,7 +132,7 @@ class _MovieDetailsState extends State<MovieDetails> {
                       ),Positioned(
                         bottom: size.height * 0.03,
                         child: Text(
-                         '${currentMovie?.year}',
+                          '${currentMovie?.year}',
                           style: AppTextStyles.bold24White,
                         ),
                       ),
@@ -142,8 +145,28 @@ class _MovieDetailsState extends State<MovieDetails> {
                   textStyle: AppTextStyles.bold20White,
                   backgroundColor: AppColors.red,
                   borderColor: AppColors.red,
-                  onPressed: () {},
+                  onPressed: () {
+                    final historyProvider = Provider.of<HistoryProvider>(
+                        context, listen: false);
+                    historyProvider.addToHistory(
+                      HistoryMovie(
+                        id: currentMovie?.id ?? 0,
+                        title: currentMovie?.titleEnglish
+                            ?? currentMovie?.title
+                            ?? "Unknown Title",
+                        posterPath: currentMovie?.largeCoverImage ?? "",
+                        date: DateTime.now().toIso8601String(),
+                        rating: currentMovie?.rating ?? 0.0,
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Added to history!")),
+                    );
+                  },
                 ),
+
+
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

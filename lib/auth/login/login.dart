@@ -9,6 +9,7 @@ import 'package:movies/widgets/choose_language.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/token_manager.dart';
+import '../../providers/history_provider.dart';
 import '../../providers/user_provider.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_routes.dart';
@@ -115,13 +116,13 @@ class _LoginState extends State<Login> {
                           },
                           child: (isObscure)
                               ? ImageIcon(
-                                  AssetImage(AppImages.passwordIcon2),
-                                  color: AppColors.white,
-                                )
+                            AssetImage(AppImages.passwordIcon2),
+                            color: AppColors.white,
+                          )
                               : Icon(
-                                  Icons.remove_red_eye,
-                                  color: AppColors.white,
-                                ),
+                            Icons.remove_red_eye,
+                            color: AppColors.white,
+                          ),
                         ),
                       ),
                       Align(
@@ -224,7 +225,7 @@ class _LoginState extends State<Login> {
       final GoogleSignIn signIn = GoogleSignIn.instance;
       signIn.initialize(
         serverClientId:
-            "121281015-l0kbclehoone64jcmliknlkbtlj1pjq8.apps.googleusercontent.com",
+        "121281015-l0kbclehoone64jcmliknlkbtlj1pjq8.apps.googleusercontent.com",
       );
 
       final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
@@ -277,7 +278,7 @@ class _LoginState extends State<Login> {
 
         bool isSuccess =
             response.statusCode == 200 &&
-            response.message.toString().toLowerCase().contains("login");
+                response.message.toString().toLowerCase().contains("login");
 
         if (isSuccess) {
           await UserManager.saveToken(response.data);
@@ -290,12 +291,34 @@ class _LoginState extends State<Login> {
           message: response.message ?? response.error ?? "Something went wrong",
           posName: "OK",
           posAction: isSuccess
-              ? () {
-                  Navigator.of(
-                    context,
-                  ).pushReplacementNamed(AppRoutes.homeScreenRouteName);
-                }
+              ? () async {
+            var userProvider = Provider.of<UserProvider>(
+                context, listen: false);
+            var historyProvider = Provider.of<HistoryProvider>(
+                context, listen: false);
+
+            // 1) حفظ بيانات المستخدم
+            userProvider.updateUser(
+              MyUser(
+                id: response.data ?? "",
+                email: emailController.text.trim(),
+                name: "",
+                phone: "",
+                avaterId: 1,
+              ),
+            );
+
+            // 2) تحميل الهيستوري المرتبط باليوزر
+            final userId = userProvider.currentUser!.id;
+
+            await historyProvider.loadHistory(userId);
+
+            // 3) الدخول للهوم
+            Navigator.of(context).pushReplacementNamed(
+                AppRoutes.homeScreenRouteName);
+          }
               : null,
+
         );
       } catch (e) {
         Navigator.of(context).pop();

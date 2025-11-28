@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_text_styles.dart';
+
 import '../../../model/MovieApiManager.dart';
 import '../../../model/movies/movie_response.dart';
 import '../home_tab/widget/movie_item.dart';
@@ -112,6 +113,7 @@ class _BrowseTabState extends State<BrowseTab> {
                             width: 0.444,
                           );
                         },
+                          )
                       );
                     },
                   ),
