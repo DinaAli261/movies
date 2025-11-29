@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:movies/l10n/app_localizations.dart';
+import 'package:movies/model/movies/WatchListMovies.dart';
 import 'package:movies/movie_details/cast_card.dart';
 import 'package:movies/movie_details/stats.dart';
 import 'package:movies/movie_details/suggestion_item.dart';
+import 'package:movies/providers/watch_list_provider.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/utils/app_text_styles.dart';
@@ -19,8 +21,9 @@ import 'movie_details_api_manager.dart';
 
 class MovieDetails extends StatefulWidget {
   final int movieId;
+  bool isSelectes = false;
 
-  const MovieDetails({super.key, required this.movieId});
+  MovieDetails({super.key, required this.movieId});
 
   @override
   State<MovieDetails> createState() => _MovieDetailsState();
@@ -113,10 +116,40 @@ class _MovieDetailsState extends State<MovieDetails> {
                                   Navigator.of(context).pop();
                                 },
                               ),
-                              ImageIcon(
-                                AssetImage(AppImages.movieDetailsIconSave),
-                                color: AppColors.white,
-                                size: 16,
+                              InkWell(
+                                onTap: () {
+                                  final watchListProvider = Provider.of<
+                                      WatchListProvider>(
+                                      context, listen: false);
+                                  watchListProvider.addTowatchList(
+                                    Watchlistmovies(
+                                      id: currentMovie?.id ?? 0,
+                                      title:
+                                      currentMovie?.titleEnglish ??
+                                          currentMovie?.title ??
+                                          "Unknown Title",
+                                      posterPath: currentMovie
+                                          ?.largeCoverImage ?? "",
+                                      date: DateTime.now().toIso8601String(),
+                                      rating: currentMovie?.rating ?? 0.0,
+                                    ),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text("Added to watchList!")),
+                                  );
+                                  setState(() {
+                                    widget.isSelectes = !widget.isSelectes;
+                                  });
+                                },
+                                child: widget.isSelectes
+                                    ? Icon(Icons.label_important,
+                                  color: AppColors.yellow, size: 35,)
+                                    : ImageIcon(
+                                  AssetImage(AppImages.movieDetailsIconSave),
+                                  color: AppColors.white,
+                                  size: 16,
+                                ),
                               ),
                             ],
                           ),
