@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies/home/tabs/profile_tab/widget/custom_details.dart';
 import 'package:movies/home/tabs/profile_tab/widget/custom_tap.dart';
 import 'package:movies/providers/user_provider.dart';
+import 'package:movies/providers/watch_list_provider.dart';
 import 'package:movies/utils/app_colors.dart';
 import 'package:movies/utils/app_images.dart';
 import 'package:movies/utils/app_text_styles.dart';
@@ -22,6 +23,8 @@ class ProfileTab extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     var userProvider = Provider.of<UserProvider>(context);
+    var watchListProvider = Provider.of<WatchListProvider>(
+        context, listen: false);
 
     int avatarIndex = (userProvider.currentUser?.avaterId ?? 1) - 1;
     if (avatarIndex < 0 || avatarIndex >= Account.avatars.length) {
@@ -52,7 +55,14 @@ class ProfileTab extends StatelessWidget {
                         height: 100,
                         fit: BoxFit.cover,
                       ),
-                      CustomDetails(text: 'Watch List', num: '12'),
+                      Consumer<WatchListProvider>(
+                        builder: (context, watchListProvider, _) {
+                          return CustomDetails(
+                            text: 'Watch List',
+                            num: '${watchListProvider.watchList.length}',
+                          );
+                        },
+                      ),
                       Consumer<HistoryProvider>(
                         builder: (context, historyProvider, _) {
                           return CustomDetails(
@@ -145,7 +155,50 @@ class ProfileTab extends StatelessWidget {
                             child: TabBarView(
                               children: [
                                 // Watchlist Placeholder
-                                Center(child: Image.asset(AppImages.emptyIcon)),
+                                Consumer<WatchListProvider>(
+                                  builder: (context, WatchListProvider, _) {
+                                    if (WatchListProvider.watchList.isEmpty) {
+                                      return Center(
+                                        child: Image.asset(AppImages.emptyIcon),
+                                      );
+                                    }
+                                    return GridView.builder(
+                                      padding: EdgeInsets.all(width * 0.02),
+                                      gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        mainAxisSpacing: height * 0.017,
+                                        crossAxisSpacing: width * 0.04,
+                                        childAspectRatio: 189 / 279,
+                                      ),
+                                      itemCount: WatchListProvider.watchList
+                                          .length,
+                                      itemBuilder: (context, index) {
+                                        final wMovie =
+                                        WatchListProvider.watchList[index];
+
+                                        final WatchListAsMovie = Movie(
+                                          id: wMovie.id,
+                                          title: wMovie.title,
+                                          titleEnglish: wMovie.title,
+                                          year: 0,
+                                          rating: 0,
+                                          mediumCoverImage: wMovie.posterPath,
+                                          largeCoverImage: wMovie.posterPath,
+                                          genres: [],
+                                          runtime: 0,
+                                        );
+                                        return MovieItem(
+                                          index: index,
+                                          movie: WatchListAsMovie,
+                                          height: 0.24,
+                                          width: 0.3395,
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                                // Center(child: Image.asset(AppImages.emptyIcon)),
 
                                 Consumer<HistoryProvider>(
                                   builder: (context, historyProvider, _) {
@@ -200,8 +253,7 @@ class ProfileTab extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: height * 0.03),
-            Image.asset(AppImages.emptyIcon),
+
           ],
         ),
       ),

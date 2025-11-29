@@ -208,6 +208,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
           title: "Success",
           message: response.message ?? "Profile updated successfully",
           posName: "OK",
+            posAction: () {
+              Navigator.pop(context);
+            }
         );
       } else {
         DialogUtils.showMessage(
@@ -215,6 +218,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
           title: "Error",
           message: "Failed to update profile",
           posName: "OK",
+            posAction: () {
+
+            }
         );
       }
     }
